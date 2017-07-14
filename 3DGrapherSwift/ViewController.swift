@@ -723,82 +723,38 @@ class ViewController: UIViewController {
     }
     func setupKeyboardForFunctionFields()
     {
-        var inputView = UIView()
-        switch chosenFunctionType
-        {
-        case 1:
-            inputView = (UINib(nibName: "mathBoardPolar", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as? UIView)!
-        case 2:
-            inputView = (UINib(nibName: "mathBoardSpherical", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as? UIView)!
-        case 3:
-            inputView = (UINib(nibName: "mathBoardUV", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as? UIView)!
-        case 4:
-            inputView = (UINib(nibName: "mathBoardT", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as? UIView)!
-        default:
-            inputView = (UINib(nibName: "mathBoardCartesian", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as? UIView)!
-        }
-        
-        inputView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.width/1.9)
-        
-        for v in inputView.subviews
-        {
-            for v2 in v.subviews
-            {
-                for v3 in v2.subviews
-                {
-                    let button : UIButton = v3 as! UIButton
-                    button.layer.borderWidth = 0.50
-                    if button.tag < 2
-                    {
-                        button.setTitleColor(button.backgroundColor, for: .highlighted)
-                    }
-                    button.addTarget(self, action:#selector(keyboardTapStart), for: .touchDown)
-                    button.addTarget(self, action:#selector(keyboardTapEnd), for: .touchUpInside)
-                    button.addTarget(self, action:#selector(keyboardTapStart), for: .touchDragEnter)
-                    button.addTarget(self, action:#selector(keyboardTapEnd), for: .touchDragExit)
-                    button.addTarget(self, action:#selector(keyboardTap), for: .touchUpInside)
-                    
-                    
-                }
-            }
-        }
-        
         for i in 0...2
         {
+            var inputView = keyboard()
+            switch chosenFunctionType
+            {
+            case 1:
+                inputView = (UINib(nibName: "mathBoardPolar", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as? keyboard)!
+            case 2:
+                inputView = (UINib(nibName: "mathBoardSpherical", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as? keyboard)!
+            case 3:
+                inputView = (UINib(nibName: "mathBoardUV", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as? keyboard)!
+            case 4:
+                inputView = (UINib(nibName: "mathBoardT", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as? keyboard)!
+            default:
+                inputView = (UINib(nibName: "mathBoardCartesian", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as? keyboard)!
+            }
+            
+            inputView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 200)
             fields[i].inputView = inputView
+            inputView.textField = fields[i]
         }
     }
     func setupKeyboardForDomainFields()
     {
-        let inputView = (UINib(nibName: "mathBoard", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as? UIView)!
-        inputView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.width/1.9)
-        
-        for v in inputView.subviews
-        {
-            for v2 in v.subviews
-            {
-                for v3 in v2.subviews
-                {
-                    let button : UIButton = v3 as! UIButton
-                    button.layer.borderWidth = 0.50
-                    if button.tag < 2
-                    {
-                        button.setTitleColor(button.backgroundColor, for: .highlighted)
-                    }
-                    button.addTarget(self, action:#selector(keyboardTapStart), for: .touchDown)
-                    button.addTarget(self, action:#selector(keyboardTapEnd), for: .touchUpInside)
-                    button.addTarget(self, action:#selector(keyboardTapStart), for: .touchDragEnter)
-                    button.addTarget(self, action:#selector(keyboardTapEnd), for: .touchDragExit)
-                    button.addTarget(self, action:#selector(keyboardTap), for: .touchUpInside)
-                    
-                    
-                }
-            }
-        }
 
         for i in 3...6
         {
+            let inputView = (UINib(nibName: "mathBoard", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as? keyboard)!
+            inputView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 200)
+            
             fields[i].inputView = inputView
+            inputView.textField = fields[i]
         }
     }
     func setupInputs()
@@ -1420,15 +1376,6 @@ class ViewController: UIViewController {
         {
             if functionType < 2
             {
-                precision = desiredPrecision
-                render()
-            }
-        }
-        else if recognizer.state == .began
-        {
-            if functionType < 2
-            {
-                precision = pinchPrecision
                 render()
             }
         }
@@ -1446,14 +1393,7 @@ class ViewController: UIViewController {
                 {
                     max = 1
                 }
-                if functionType < 2
-                {
-                    render()
-                }
-                else
-                {
-                    redraw()
-                }
+                redraw()
                 
             }
         }

@@ -23,6 +23,7 @@
 		E48DE8C91F12170500DACF4E /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E48DE8C81F12170500DACF4E /* icon.png */; };
 		E48DE8D01F132B0F00DACF4E /* rotate1.png in Resources */ = {isa = PBXBuildFile; fileRef = E48DE8CE1F132B0F00DACF4E /* rotate1.png */; };
 		E48DE8D11F132B0F00DACF4E /* rotate2.png in Resources */ = {isa = PBXBuildFile; fileRef = E48DE8CF1F132B0F00DACF4E /* rotate2.png */; };
+		E4FA60731F197F180027BDFB /* keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FA60721F197F180027BDFB /* keyboard.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 		E48DE8C81F12170500DACF4E /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = 3DGrapherSwift/icon.png; sourceTree = "<group>"; };
 		E48DE8CE1F132B0F00DACF4E /* rotate1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = rotate1.png; path = 3DGrapherSwift/rotate1.png; sourceTree = "<group>"; };
 		E48DE8CF1F132B0F00DACF4E /* rotate2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = rotate2.png; path = 3DGrapherSwift/rotate2.png; sourceTree = "<group>"; };
+		E4FA60721F197F180027BDFB /* keyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = keyboard.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +84,7 @@
 			children = (
 				E4348A9B1EFB29D500D4E7A1 /* AppDelegate.swift */,
 				E4348A9D1EFB29D500D4E7A1 /* ViewController.swift */,
+				E4FA60721F197F180027BDFB /* keyboard.swift */,
 				E45049361F179A61004B6FA2 /* mathBoardCartesian.xib */,
 				E450492E1F1791E1004B6FA2 /* mathBoardUV.xib */,
 				E450492F1F1791E1004B6FA2 /* mathBoardPolar.xib */,
@@ -182,6 +185,7 @@
 			files = (
 				E4348A9E1EFB29D500D4E7A1 /* ViewController.swift in Sources */,
 				E450492D1F177BEF004B6FA2 /* AdaptiveLabel.swift in Sources */,
+				E4FA60731F197F180027BDFB /* keyboard.swift in Sources */,
 				E4348A9C1EFB29D500D4E7A1 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
