@@ -21,15 +21,15 @@ class ViewController: UIViewController {
     
     let graphTypes = ["z(x,y)","z(r,θ)","ρ(θ,Φ)","r(u,v)","r(t)"]
     
-    let smallDouble : Double = 0.0000001
+    let smallDouble : Double = 0.0000000000001
     let desiredPrecision : Double = 0.0005
-    let pinchPrecision : Double = 0.001
     var precision : Double = Double()
     
     var xx = Double()
     var xy = Double()
     var yx = Double()
     var yy = Double()
+    var zx = Double()
     var zy = Double()
     
     var isAxesOn : Bool = true
@@ -41,14 +41,14 @@ class ViewController: UIViewController {
     var colors = [[UIColor]]()
     var colorIndex = 0
     
-    let height : CGFloat = 45
+    let height : CGFloat = 47
     let spacing : CGFloat = 5.7
     let topSpacing : CGFloat = 2
     let switchLength : CGFloat = 51
     let gridDensityButtonLength : CGFloat = 56
-    let densityHeight : CGFloat = 34
+    let densityHeight : CGFloat = 36
     let switchHeight : CGFloat = 31
-    let colorButtonLength : CGFloat = 31
+    let colorButtonLength : CGFloat = 33
     let colorButtonRadius : CGFloat = 4
     let colorButtonSelectViewWidth : CGFloat = 2
     let colorSpacing : CGFloat = 6
@@ -63,6 +63,7 @@ class ViewController: UIViewController {
     var s : Double = Double()
     //let al : Double = 7.89
     var b : Double = 0.8
+    var c : Double = 0
     var lineWidth : CGFloat = 0.75
     var parametricLineWidth : CGFloat = 2
     let pi : Double = M_PI
@@ -88,6 +89,8 @@ class ViewController: UIViewController {
     
     var fields = [UITextField(),UITextField(),UITextField(),UITextField(),UITextField(),UITextField(),UITextField()]
     var labels = [UILabel(),UILabel(),UILabel(),UILabel(),UILabel()]
+    
+    
     let labelNames = [["z(x,y) = ","",""],
                       ["z(r,θ) = ","",""],
                       ["ρ(θ,Φ) = ","",""],
@@ -141,7 +144,7 @@ class ViewController: UIViewController {
         chosenFunctionType = functionType
     
         colors = [[UIColor(red: 255/255, green: 153/255, blue: 51/255, alpha: 1),.red,.white],
-                  [.green,.red,.white],
+                  [UIColor(red: 0/255, green: 204/255, blue: 0/255, alpha: 1),.red,.white],
                   [view.tintColor,.red,.white],
                   [UIColor(red: 84/255, green: 65/255, blue: 181/255, alpha: 1),.red,.white],
                   [UIColor(red: 255/255, green: 51/255, blue : 0/255, alpha: 1),view.tintColor,.white],
@@ -354,8 +357,8 @@ class ViewController: UIViewController {
         for i in -1...1
         {
             let line = UIBezierPath()
-            line.move(to: CGPoint(x: 10,y: 22.5+8.5*Double(i)))
-            line.addLine(to: CGPoint(x: 35,y: 22.5+8.5*Double(i)))
+            line.move(to: CGPoint(x: 10,y: 23.5+9.5*Double(i)))
+            line.addLine(to: CGPoint(x: 37,y: 23.5+9.5*Double(i)))
             let lineLayer = CAShapeLayer()
             lineLayer.path = line.cgPath
             lineLayer.strokeColor = UIColor.white.withAlphaComponent(0.8).cgColor
@@ -471,8 +474,8 @@ class ViewController: UIViewController {
                         for i in stride(from: -1, through: 1, by: 2)
                         {
                             let line = UIBezierPath()
-                            line.move(to: CGPoint(x: 13,y: 22.5+9.5*Double(i)))
-                            line.addLine(to: CGPoint(x: 32,y: 22.5-9.5*Double(i)))
+                            line.move(to: CGPoint(x: 13,y: 23.5+10.5*Double(i)))
+                            line.addLine(to: CGPoint(x: 34,y: 23.5-10.5*Double(i)))
                             let lineLayer = CAShapeLayer()
                             lineLayer.path = line.cgPath
                             lineLayer.strokeColor = UIColor.white.withAlphaComponent(0.8).cgColor
@@ -523,8 +526,8 @@ class ViewController: UIViewController {
                     for i in -1...1
                     {
                         let line = UIBezierPath()
-                        line.move(to: CGPoint(x: 10,y: 22.5+8.5*Double(i)))
-                        line.addLine(to: CGPoint(x: 35,y: 22.5+8.5*Double(i)))
+                        line.move(to: CGPoint(x: 10,y: 23.5+9.5*Double(i)))
+                        line.addLine(to: CGPoint(x: 37,y: 23.5+9.5*Double(i)))
                         let lineLayer = CAShapeLayer()
                         lineLayer.path = line.cgPath
                         lineLayer.strokeColor = UIColor.white.withAlphaComponent(0.8).cgColor
@@ -609,6 +612,8 @@ class ViewController: UIViewController {
             fields[i].inputAssistantItem.trailingBarButtonGroups = []
             fields[i].addTarget(self, action: #selector(tapAway), for: .editingDidBegin)
             fields[i].addTarget(self, action: #selector(tapAway), for: .editingChanged)
+            fields[i].readonly = true
+            fields[i].tag = i
             fieldView.addSubview(fields[i])
             
             labels[i].frame = CGRect(x: 5, y: 2+CGFloat(i)*27, width: 70, height: 25)
@@ -634,6 +639,8 @@ class ViewController: UIViewController {
             fields[i].inputAssistantItem.trailingBarButtonGroups = []
             fields[i].addTarget(self, action: #selector(tapAway), for: .editingDidBegin)
             fields[i].addTarget(self, action: #selector(tapAway), for: .editingChanged)
+            fields[i].readonly = true
+            fields[i].tag = i
             fieldView.addSubview(fields[i])
         }
         setupKeyboardForDomainFields()
@@ -742,6 +749,7 @@ class ViewController: UIViewController {
             
             inputView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 200)
             fields[i].inputView = inputView
+            inputView.viewController = self
             inputView.textField = fields[i]
         }
     }
@@ -754,6 +762,7 @@ class ViewController: UIViewController {
             inputView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 200)
             
             fields[i].inputView = inputView
+            inputView.viewController = self
             inputView.textField = fields[i]
         }
     }
@@ -762,6 +771,7 @@ class ViewController: UIViewController {
         for field in fields
         {
             field.text = ""
+            (field.inputView as! keyboard).expressionArray = []
         }
         for i in 0...2
         {
@@ -848,39 +858,6 @@ class ViewController: UIViewController {
             self.tapAway()
         }
 
-    }
-    func keyboardTap(sender: UIButton!)
-    {
-        functionType = (functionType + 1)%5
-        render()
-    }
-    func keyboardTapEnd(sender: UIButton!)
-    {
-        sender.layer.borderColor = UIColor.black.cgColor
-        if sender.subviews.count > 0
-        {
-            if let keyLabel : AdaptiveLabel = sender.subviews[sender.subviews.count-1] as? AdaptiveLabel
-            {
-                keyLabel.removeFromSuperview()
-            }
-        }
-
-    }
-    func keyboardTapStart(sender: UIButton!)
-    {
-        if sender.tag < 2
-        {
-            sender.layer.borderColor = sender.backgroundColor?.cgColor
-            let v = AdaptiveLabel(frame: CGRect(x: CGFloat(-10-10*sender.tag), y: -sender.frame.height-10, width: sender.frame.width+20, height: sender.frame.height+10.50))
-            v.backgroundColor = sender.backgroundColor
-            v.layer.borderWidth = 0.50
-            v.clipsToBounds = true
-            v.text = sender.titleLabel?.text
-            v.textColor = sender.titleColor(for: .normal)
-            v.textAlignment = .center
-            sender.addSubview(v)
-        }
-        AudioServicesPlaySystemSound(1104)
     }
     @IBAction func tapAway(_ sender: Any? = nil)
     {
@@ -1008,13 +985,13 @@ class ViewController: UIViewController {
         
             if curve.count > 0
             {
-                var currentx = (xx*curve[0].x + yx*curve[0].y)/max*xSide/2
+                var currentx = (xx*curve[0].x + yx*curve[0].y + zx*curve[0].z)/max*xSide/2
                 var currenty = (xy*curve[0].x + yy*curve[0].y + zy*curve[0].z)/max*xSide/2
                 aPath.move(to: CGPoint(x: xSide/2+currentx, y: ySide/2-currenty))
                 
                 for i in 1..<curve.count
                 {
-                    currentx = (xx*curve[i].x + yx*curve[i].y)/max*xSide/2
+                    currentx = (xx*curve[i].x + yx*curve[i].y + zx*curve[i].z)/max*xSide/2
                     currenty = (xy*curve[i].x + yy*curve[i].y + zy*curve[i].z)/max*xSide/2
                     aPath.addLine(to: CGPoint(x: xSide/2+currentx, y: ySide/2-currenty))
                     
@@ -1022,7 +999,7 @@ class ViewController: UIViewController {
                 
                 let curveLayer = CAShapeLayer()
                 curveLayer.path = aPath.cgPath
-                curveLayer.strokeColor = colors[colorIndex][0].cgColor
+                curveLayer.strokeColor = colors[colorIndex][0].withAlphaComponent(0.75).cgColor
                 curveLayer.lineWidth = CGFloat(lineWidth)
                 if functionType == 4
                 {
@@ -1080,6 +1057,7 @@ class ViewController: UIViewController {
         xyComp()
         yxComp()
         yyComp()
+        zxComp()
         zyComp()
         
         drawAxis()
@@ -1093,7 +1071,7 @@ class ViewController: UIViewController {
         let xLayer = CAShapeLayer()
         xLayer.path = x.cgPath
         xLayer.strokeColor = colors[colorIndex][1].cgColor
-        xLayer.lineWidth = 3.0
+        xLayer.lineWidth = 1.0
         xLayer.position = CGPoint(x: 0, y: 0);
         xLayer.fillColor = UIColor.clear.cgColor
         graphView.layer.addSublayer(xLayer)
@@ -1106,14 +1084,13 @@ class ViewController: UIViewController {
         xLetter.textColor = colors[colorIndex][2]
         graphView.addSubview(xLetter)
        
-        
         let y = UIBezierPath()
         y.move(to: CGPoint(x: xSide/2, y: ySide/2))
         y.addLine(to: CGPoint(x: xSide/max/2*max*yx+xSide/2, y: ySide/2-max*yy*xSide/max/2))
         let yLayer = CAShapeLayer()
         yLayer.path = y.cgPath
         yLayer.strokeColor = colors[colorIndex][1].cgColor
-        yLayer.lineWidth = 3.0
+        yLayer.lineWidth = 1.0
         yLayer.position = CGPoint(x: 0, y: 0);
         yLayer.fillColor = UIColor.clear.cgColor
         graphView.layer.addSublayer(yLayer)
@@ -1127,17 +1104,17 @@ class ViewController: UIViewController {
         
         let z = UIBezierPath()
         z.move(to: CGPoint(x: xSide/2, y: ySide/2))
-        z.addLine(to: CGPoint(x: xSide/2, y: ySide/2-max*zy*xSide/max/2))
+        z.addLine(to: CGPoint(x: xSide/max/2*max*zx+xSide/2, y: ySide/2-max*zy*xSide/max/2))
         let zLayer = CAShapeLayer()
         zLayer.path = z.cgPath
         zLayer.strokeColor = colors[colorIndex][1].cgColor
-        zLayer.lineWidth = 3.0
+        zLayer.lineWidth = 1.0
         zLayer.position = CGPoint(x: 0, y: 0);
         zLayer.fillColor = UIColor.clear.cgColor
         graphView.layer.addSublayer(zLayer)
         
         let zLetter = UILabel()
-        zLetter.frame = CGRect(x: xSide/2-6, y: ySide/2-max*zy*xSide/max/2-6, width: 12, height: 12)
+        zLetter.frame = CGRect(x: xSide/max/2*max*zx+xSide/2-6, y: ySide/2-max*zy*xSide/max/2-6, width: 12, height: 12)
         zLetter.text = "z"
         zLetter.backgroundColor = UIColor.clear
         zLetter.textColor = colors[colorIndex][2]
@@ -1207,7 +1184,7 @@ class ViewController: UIViewController {
             z = Z(x: g, y: h)
         }
         
-        currentx = xx*x+yx*y
+        currentx = xx*x+yx*y+zx*z
         currenty = xy*x+yy*y+zy*z
         currentx = currentx/max*xSide/2
         currenty = currenty/max*xSide/2
@@ -1271,7 +1248,7 @@ class ViewController: UIViewController {
             z = Z(x: h, y: g)
         }
         
-        currentx = xx*x+yx*y
+        currentx = xx*x+yx*y+zx*z
         currenty = xy*x+yy*y+zy*z
         currentx = currentx/max*xSide/2
         currenty = currenty/max*xSide/2
@@ -1320,7 +1297,19 @@ class ViewController: UIViewController {
     }
     func function(x: Double, y: Double, operations: [String]) -> Double
     {
-        return sin(x*x+y*y)
+        if (fields[0].text?.characters.count)! > 0
+        {
+            var numericExpression = fields[0].text!
+            numericExpression = numericExpression.replacingOccurrences(of: "⋅", with: "*")
+            numericExpression = numericExpression.replacingOccurrences(of: "x", with: "(\(x))")
+            numericExpression = numericExpression.replacingOccurrences(of: "y", with: "(\(y))")
+            numericExpression = numericExpression.replacingOccurrences(of: "√", with: "sqrt")
+            let expression = NSExpression(format: numericExpression)
+            let result = expression.expressionValue(with: nil, context: nil) as! Double
+            return result
+
+        }
+        return (x-1)*(x-1)+(y-1)*(y-1)
     }
     func X(x: Double, y: Double) -> Double
     {
@@ -1340,22 +1329,35 @@ class ViewController: UIViewController {
     func handlePan(recognizer: UIPanGestureRecognizer)
     {
         tapAway()
-
         let velocityX : Double = Double(recognizer.velocity(in: graphView).x)
         let velocityY : Double = Double(recognizer.velocity(in: graphView).y)
-        let speedScale : Double = 1.5
+        var speedScale : Double = 0.9
+        if recognizer.state == .began
+        {
+            speedScale = speedScale * 0.4
+        }
         a = a + velocityX * 0.001 * speedScale
         b = b + velocityY * 0.001 * speedScale
-        if b > pi/2
-        {
-            b = pi/2
-        }
+        
         if b < 0
         {
             b = 0
         }
+        if b > pi/2
+        {
+            b = pi/2
+        }
+        
         redraw()
         
+    }
+    func sign(_ x: Double) -> Double
+    {
+        if x < 0
+        {
+            return -1
+        }
+        return 1
     }
     func resizeS()
     {
@@ -1367,7 +1369,7 @@ class ViewController: UIViewController {
         {
             s = max
         }
-        s = s*9/10
+        s = s*24/25
     }
     func handlePinch(recognizer: UIPinchGestureRecognizer)
     {
@@ -1384,10 +1386,10 @@ class ViewController: UIViewController {
             let velocity = Double(recognizer.velocity)
             if !(velocity.isNaN || velocity.isInfinite)
             {
-                max = max - velocity
-                if max > 250
+                max = max - velocity * max/15
+                if max > 150
                 {
-                    max = 250
+                    max = 150
                 }
                 if max < 1
                 {
@@ -1401,23 +1403,27 @@ class ViewController: UIViewController {
     }
     func xxComp()
     {
-        xx = cos(a)
+        xx = cos(a)*cos(c)-sin(c)*sin(a)*sin(b)
     }
     func xyComp()
     {
-        xy = sin(a)*sin(b)
+        xy = sin(a)*sin(b)*cos(c)+sin(c)*cos(a)
     }
     func yxComp()
     {
-        yx = -sin(a)
+        yx = -sin(a)*cos(c)-sin(c)*cos(a)*sin(b)
     }
     func yyComp()
     {
-        yy = cos(a)*sin(b)
+        yy = cos(a)*sin(b)*cos(c)-sin(c)*sin(a)
+    }
+    func zxComp()
+    {
+        zx = -sin(c)*cos(b)
     }
     func zyComp()
     {
-        zy = cos(b)
+        zy = cos(c)*cos(b)
     }
     func g(t : Double, min : Double, range : Double) -> Double
     {
@@ -1537,26 +1543,38 @@ struct point3D
     let y : Double
     let z : Double
 }
-extension UIColor {
-    
-    func add(overlay: UIColor) -> UIColor {
-        var bgR: CGFloat = 0
-        var bgG: CGFloat = 0
-        var bgB: CGFloat = 0
-        var bgA: CGFloat = 0
-        
-        var fgR: CGFloat = 0
-        var fgG: CGFloat = 0
-        var fgB: CGFloat = 0
-        var fgA: CGFloat = 0
-        
-        self.getRed(&bgR, green: &bgG, blue: &bgB, alpha: &bgA)
-        overlay.getRed(&fgR, green: &fgG, blue: &fgB, alpha: &fgA)
-        
-        let r = fgA * fgR + (1 - fgA) * bgR
-        let g = fgA * fgG + (1 - fgA) * bgG
-        let b = fgA * fgB + (1 - fgA) * bgB
-        
-        return UIColor(red: r, green: g, blue: b, alpha: 1.0)
+public extension NSNumber {
+    func sn() -> NSNumber {
+        return NSNumber(value: sin(self.doubleValue))
     }
+}
+var key: Void?
+
+class UITextFieldAdditions: NSObject {
+    var readonly: Bool = false
+}
+extension UITextField {
+
+    var readonly: Bool {
+        get {
+            return self.getAdditions().readonly
+        } set {
+            self.getAdditions().readonly = newValue
+        }
+    }
+    
+    private func getAdditions() -> UITextFieldAdditions {
+        var additions = objc_getAssociatedObject(self, &key) as? UITextFieldAdditions
+        if additions == nil {
+            additions = UITextFieldAdditions()
+            objc_setAssociatedObject(self, &key, additions!, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN)
+        }
+        return additions!
+    }
+    
+    open override func target(forAction action: Selector, withSender sender: Any?) -> Any? {
+        
+        return nil
+    }
+
 }
