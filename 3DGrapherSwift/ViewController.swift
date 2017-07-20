@@ -11,6 +11,11 @@ import AudioToolbox
 
 class ViewController: UIViewController {
     
+    var equations = [String(),String(),String()]
+    var domains = [Double(),Double(),Double(),Double()]
+    var texts = [String(),String(),String(),String(),String(),String(),String()]
+    var textArrays = [[String](),[String](),[String](),[String](),[String](),[String](),[String]()]
+    
     let defaults = UserDefaults.standard
 
     var prerender = [[point3D]]()
@@ -61,7 +66,6 @@ class ViewController: UIViewController {
     var a : Double = -2.35
     var n : Double = 40
     var s : Double = Double()
-    //let al : Double = 7.89
     var b : Double = 0.8
     var c : Double = 0
     var lineWidth : CGFloat = 0.75
@@ -75,7 +79,8 @@ class ViewController: UIViewController {
     //spherical = 2
     //parametric(u,v) = 3
     //parametric(t) = 4
-    
+    let axisLengthLabel = UILabel()
+    let eqnLabel = UILabel()
     let minexpandButton = UIButton()
     var topView : UIView = UIView()
     var fieldView : UIView = UIView()
@@ -96,6 +101,11 @@ class ViewController: UIViewController {
                       ["ρ(θ,Φ) = ","",""],
                       ["x(u,v) = ","y(u,v) = ","z(u,v) = "],
                       ["x(t) = ","y(t) = ","z(t) = "]]
+    let functionNames = ["z(x,y)","z(r,θ)","ρ(θ,Φ)","r(u,v)","r(t)"]
+    
+    var velocityTimer = Timer()
+    var endingVelocityX = Double()
+    var endingVelocityPositive = Bool()
     
     var autorotateButton = UIButton()
     var timer: Timer = Timer()
@@ -112,8 +122,6 @@ class ViewController: UIViewController {
     let axesLabel = UILabel()
     let gridDensityLabel = UILabel()
     let colorLabel = UILabel()
-
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -139,6 +147,7 @@ class ViewController: UIViewController {
         if let axesOn = defaults.object(forKey: "isAxesOn") {
             self.isAxesOn = axesOn as! Bool
         }
+        axisLengthLabel.isHidden = !isAxesOn
         
         precision = desiredPrecision
         chosenFunctionType = functionType
@@ -146,7 +155,7 @@ class ViewController: UIViewController {
         colors = [[UIColor(red: 255/255, green: 153/255, blue: 51/255, alpha: 1),.red,.white],
                   [UIColor(red: 0/255, green: 204/255, blue: 0/255, alpha: 1),.red,.white],
                   [view.tintColor,.red,.white],
-                  [UIColor(red: 84/255, green: 65/255, blue: 181/255, alpha: 1),.red,.white],
+                  [UIColor(red: 151/255, green: 85/255, blue: 183/255, alpha: 1),.red,.white],
                   [UIColor(red: 255/255, green: 51/255, blue : 0/255, alpha: 1),view.tintColor,.white],
                   [.white,.red,.white]]
         
@@ -160,10 +169,6 @@ class ViewController: UIViewController {
         
         let pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(handlePinch))
         graphView.addGestureRecognizer(pinchGestureRecognizer)
-        
-        let v : [String] = ["ln","(","x","multiply","x","plus","y","multiply","y",")"]
-        
-        postfixConvert(v: v)
         
     }
     func changeColor(sender: UIButton!) {
@@ -571,6 +576,7 @@ class ViewController: UIViewController {
         {
             layer.isHidden = !isAxesOn
         }
+        axisLengthLabel.isHidden = !isAxesOn
         
     }
     func setupTopView()
@@ -599,7 +605,6 @@ class ViewController: UIViewController {
         for i in 0...2
         {
             fields[i].frame = CGRect(x: 80, y: 2+CGFloat(i)*27, width: graphView.frame.width-85, height: 25)
-            fields[i].backgroundColor = view.tintColor.withAlphaComponent(0.4)
             fields[i].layer.cornerRadius = 5
             fields[i].textColor = .white
             let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 5, height: 25))
@@ -628,7 +633,6 @@ class ViewController: UIViewController {
         for i in 3...6
         {
             fields[i].frame = CGRect(x: 0, y: 0, width: 0, height: 0)
-            fields[i].backgroundColor = view.tintColor.withAlphaComponent(0.4)
             fields[i].layer.cornerRadius = 5
             fields[i].textColor = .white
             fields[i].textAlignment = .center
@@ -657,7 +661,7 @@ class ViewController: UIViewController {
         setupInputs()
 
         minexpandButton.frame = CGRect(x: 0, y: 69+adjustment, width: graphView.frame.width, height: 25)
-        minexpandButton.backgroundColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.2)
+        minexpandButton.backgroundColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.3)
         minexpandButton.addTarget(self, action:#selector(minOrExpand), for: .touchDown)
         
         let minus = UIBezierPath()
@@ -683,7 +687,7 @@ class ViewController: UIViewController {
         topView.addSubview(minexpandButton)
         
         let titleView : UIView = UIView(frame: CGRect(x: 0, y: 0, width: graphView.frame.width, height: 40))
-        titleView.backgroundColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.2)
+        titleView.backgroundColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.3)
         topView.addSubview(titleView)
         
         let iconView = UIImageView(image: UIImage(named: "icon.png"))
@@ -697,9 +701,24 @@ class ViewController: UIViewController {
         titleLabel.textColor = .darkGray
         titleView.addSubview(titleLabel)
         
+        eqnLabel.frame = CGRect(x: 10, y: 3, width: minexpandButton.frame.width-38, height: minexpandButton.frame.height-6)
+        eqnLabel.font = eqnLabel.font.withSize(15)
+        eqnLabel.adjustsFontSizeToFitWidth = true
+        eqnLabel.isHidden = true
+        eqnLabel.textColor = .darkGray
+        minexpandButton.addSubview(eqnLabel)
+        
+        axisLengthLabel.frame = CGRect(x: topView.frame.origin.x+5, y: topView.frame.origin.y+topView.frame.height+5, width: topView.frame.width-10, height: 20)
+        axisLengthLabel.adjustsFontSizeToFitWidth = true
+        axisLengthLabel.textAlignment = .right
+        axisLengthLabel.textColor = .white
+        axisLengthLabel.font = axisLengthLabel.font.withSize(15)
+        axisLengthLabel.text = "AXIS LENGTH: \(String(format: "%.1f", max))"
+        view.addSubview(axisLengthLabel)
+        
         functionDropDown.frame = CGRect(x: graphView.frame.width-95+6, y: 5+20, width: 90, height: 0)
         functionDropDown.layer.cornerRadius = 5
-        functionDropDown.backgroundColor = UIColor(red: 122/255, green: 172/255, blue: 223/255, alpha: 1)
+        functionDropDown.backgroundColor = view.tintColor
         for button in buttons
         {
             button.layer.cornerRadius = 5
@@ -719,8 +738,8 @@ class ViewController: UIViewController {
         functionTypeButton.clipsToBounds = true
         functionTypeButton.layer.cornerRadius = 5
         functionTypeButton.layer.borderWidth = 1
-        functionTypeButton.layer.borderColor = UIColor(red: 122/255, green: 172/255, blue: 223/255, alpha: 1).cgColor
-        functionTypeButton.backgroundColor = UIColor(red: 214/255, green: 214/255, blue: 214/255, alpha: 1)
+        functionTypeButton.layer.borderColor = view.tintColor.cgColor
+        functionTypeButton.backgroundColor = UIColor(red: 219/255, green: 219/255, blue: 219/255, alpha: 1)
         functionTypeButton.addTarget(self, action:#selector(functionTypeButtonPress), for: .touchDown)
         view.addSubview(functionTypeButton)
         
@@ -768,10 +787,28 @@ class ViewController: UIViewController {
     }
     func setupInputs()
     {
+        if chosenFunctionType == functionType
+        {
+            for i in 0...6
+            {
+                fields[i].text = texts[i]
+                (fields[i].inputView as! keyboard).expressionArray = textArrays[i]
+                (fields[i].inputView as! keyboard).hasText = (fields[i].text?.characters.count)! > 0
+
+            }
+        }
+        else
+        {
+            for field in fields
+            {
+                field.text = ""
+                (field.inputView as! keyboard).expressionArray = []
+                (field.inputView as! keyboard).hasText = false
+            }
+        }
         for field in fields
         {
-            field.text = ""
-            (field.inputView as! keyboard).expressionArray = []
+            field.backgroundColor = view.tintColor.withAlphaComponent(0.4)
         }
         for i in 0...2
         {
@@ -859,16 +896,16 @@ class ViewController: UIViewController {
         }
 
     }
+
     @IBAction func tapAway(_ sender: Any? = nil)
     {
         if let _ = sender as? UITextField {
-
         }
         else {
             self.view.endEditing(true)
         }
-       
 
+        
         if menuButton.backgroundColor == UIColor.red.withAlphaComponent(0.5)
         {
             hideMenuButton()
@@ -910,7 +947,13 @@ class ViewController: UIViewController {
             
             self.topView.frame = CGRect(x: self.graphView.frame.origin.x, y: self.graphView.frame.origin.y, width: self.graphView.frame.width, height: 66)
             
-        }, completion: nil)
+            self.axisLengthLabel.frame = CGRect(x: self.topView.frame.origin.x+5, y: self.topView.frame.origin.y+self.topView.frame.height+5, width: self.topView.frame.width-10, height: 20)
+
+            
+        }, completion:{
+                complete in
+                self.eqnLabel.isHidden = false
+            })
 
     }
     func hideWithoutAnimation()
@@ -922,6 +965,10 @@ class ViewController: UIViewController {
         self.fieldView.frame = CGRect(x: 0, y: 40, width: self.graphView.frame.width, height: 0)
         
         self.topView.frame = CGRect(x: self.graphView.frame.origin.x, y: self.graphView.frame.origin.y, width: self.graphView.frame.width, height: 66)
+        
+        self.axisLengthLabel.frame = CGRect(x: self.topView.frame.origin.x+5, y: self.topView.frame.origin.y+self.topView.frame.height+5, width: self.topView.frame.width-10, height: 20)
+
+        self.eqnLabel.isHidden = false
     }
     func expand()
     {
@@ -941,6 +988,10 @@ class ViewController: UIViewController {
             
             self.topView.frame = CGRect(x: self.graphView.frame.origin.x, y: self.graphView.frame.origin.y, width: self.graphView.frame.width, height: 175-adjustment)
             
+            self.axisLengthLabel.frame = CGRect(x: self.topView.frame.origin.x+5, y: self.topView.frame.origin.y+self.topView.frame.height+5, width: self.topView.frame.width-10, height: 20)
+
+            self.eqnLabel.isHidden = true
+
         }, completion: nil)
 
     }
@@ -959,7 +1010,8 @@ class ViewController: UIViewController {
         {
             autorotateButton.tintColor = UIColor(red: 109/255, green: 157/255, blue: 206/255, alpha: 1)
             isRotating = true
-            timer = Timer.scheduledTimer(timeInterval: 0.001, target: self, selector: #selector(runTimedCode), userInfo: nil, repeats: true)
+            velocityTimer.invalidate()
+            timer = Timer.scheduledTimer(timeInterval: 0.002, target: self, selector: #selector(runTimedCode), userInfo: nil, repeats: true)
 
         }
         else
@@ -970,9 +1022,38 @@ class ViewController: UIViewController {
         }
 
     }
+    func runEndVelocityCode()
+    {
+        if endingVelocityPositive
+        {
+            if endingVelocityX > 0.01
+            {
+                a = a + endingVelocityX/10
+                redraw()
+                endingVelocityX = endingVelocityX*0.975
+            }
+            else
+            {
+                velocityTimer.invalidate()
+            }
+        }
+        else if !endingVelocityPositive
+        {
+            if endingVelocityX < -0.01
+            {
+                a = a + endingVelocityX/10
+                redraw()
+                endingVelocityX = endingVelocityX*0.975
+            }
+            else
+            {
+                velocityTimer.invalidate()
+            }
+        }
+    }
     func runTimedCode()
     {
-        a = a + 0.01
+        a = a + 0.02
         redraw()
     }
     func redraw()
@@ -999,7 +1080,7 @@ class ViewController: UIViewController {
                 
                 let curveLayer = CAShapeLayer()
                 curveLayer.path = aPath.cgPath
-                curveLayer.strokeColor = colors[colorIndex][0].withAlphaComponent(0.75).cgColor
+                curveLayer.strokeColor = colors[colorIndex][0].withAlphaComponent(0.85).cgColor
                 curveLayer.lineWidth = CGFloat(lineWidth)
                 if functionType == 4
                 {
@@ -1020,9 +1101,9 @@ class ViewController: UIViewController {
     {
         prerender.removeAll()
 
-        recalibrate()
-        
         resizeS()
+        
+        recalibrate()
         
         if functionType == 4
         {
@@ -1039,8 +1120,8 @@ class ViewController: UIViewController {
                 greenGraph(start: Double(temp)/(self.n+1), end: Double(temp+1)/(self.n+1))
             }
         }
-        redraw()
         
+        redraw()
         
     }
     func recalibrate()
@@ -1177,8 +1258,8 @@ class ViewController: UIViewController {
         }
         else if functionType == 3
         {
-            let g : Double = self.g(t: t, min: 0, range: 4*pi)
-            let h : Double = self.h(t: t, min: 0, range: 2*pi)
+            let g : Double = self.g(t: t, min: domains[0], range: domains[1]-domains[0])
+            let h : Double = self.h(t: t, min: domains[2], range: domains[3]-domains[2])
             x = X(x: g, y: h)
             y = Y(x: g, y: h)
             z = Z(x: g, y: h)
@@ -1188,7 +1269,6 @@ class ViewController: UIViewController {
         currenty = xy*x+yy*y+zy*z
         currentx = currentx/max*xSide/2
         currenty = currenty/max*xSide/2
-
         if !(currentx.isNaN || currentx.isInfinite || currenty.isNaN || currenty.isInfinite)
         {
             self.prerender[prerender.count-1].append(point3D(x: x, y: y, z: z))
@@ -1241,8 +1321,8 @@ class ViewController: UIViewController {
         }
         else if functionType == 3
         {
-            let h : Double = self.h(t: t, min: 0, range: 4*pi)
-            let g : Double = self.g(t: t, min: 0, range: 2*pi)
+            let h : Double = self.h(t: t, min: domains[0], range: domains[1]-domains[0])
+            let g : Double = self.g(t: t, min: domains[2], range: domains[3]-domains[2])
             x = X(x: h, y: g)
             y = Y(x: h, y: g)
             z = Z(x: h, y: g)
@@ -1265,15 +1345,15 @@ class ViewController: UIViewController {
     }
     func parametrictGraph()
     {
-        let minT : Double = 0
-        let maxT : Double = 5*pi
+        let minT : Double = domains[0]
+        let maxT : Double = domains[1]
         let deltaT = (maxT-minT)*precision/2
         for t in stride(from: minT, to: maxT, by: deltaT)
         {
             let x = X(x: t, y: 0)
             let y = Y(x: t, y: 0)
             let z = Z(x: t, y: 0)
-            
+        
             self.prerender[prerender.count-1].append(point3D(x: x, y: y, z: z))
         }
     }
@@ -1297,33 +1377,94 @@ class ViewController: UIViewController {
     }
     func function(x: Double, y: Double, operations: [String]) -> Double
     {
-        if (fields[0].text?.characters.count)! > 0
+        if (equations[0].characters.count) > 0
         {
-            var numericExpression = fields[0].text!
-            numericExpression = numericExpression.replacingOccurrences(of: "⋅", with: "*")
-            numericExpression = numericExpression.replacingOccurrences(of: "x", with: "(\(x))")
-            numericExpression = numericExpression.replacingOccurrences(of: "y", with: "(\(y))")
-            numericExpression = numericExpression.replacingOccurrences(of: "√", with: "sqrt")
+            var numericExpression = self.equations[0]
+            if functionType == 0
+            {
+                numericExpression = numericExpression.replacingOccurrences(of: "x", with: "(\(x))")
+                numericExpression = numericExpression.replacingOccurrences(of: "y", with: "(\(y))")
+            }
+            else if functionType == 1
+            {
+                numericExpression = numericExpression.replacingOccurrences(of: "r", with: "(\(x))")
+                numericExpression = numericExpression.replacingOccurrences(of: "θ", with: "(\(y))")
+            }
+            else if functionType == 2
+            {
+                numericExpression = numericExpression.replacingOccurrences(of: "θ", with: "(\(x))")
+                numericExpression = numericExpression.replacingOccurrences(of: "Φ", with: "(\(y))")
+            }
             let expression = NSExpression(format: numericExpression)
             let result = expression.expressionValue(with: nil, context: nil) as! Double
             return result
-
         }
-        return (x-1)*(x-1)+(y-1)*(y-1)
+        return 0
     }
     func X(x: Double, y: Double) -> Double
     {
-        return (1.2+0.5*cos(y))*cos(x)
+        if (equations[0].characters.count) > 0
+        {
+            var numericExpression = self.equations[0]
+            if functionType == 3
+            {
+                numericExpression = numericExpression.replacingOccurrences(of: "u", with: "(\(x))")
+                numericExpression = numericExpression.replacingOccurrences(of: "v", with: "(\(y))")
+            }
+            else if functionType == 4
+            {
+                numericExpression = numericExpression.replacingOccurrences(of: "t", with: "(\(x))")
+            }
+            let expression = NSExpression(format: numericExpression)
+            let result = expression.expressionValue(with: nil, context: nil) as! Double
+            return result
+        }
+        return 0
+        //return (1.2+0.5*cos(y))*cos(x)
         //return x*cos(x)*(4+cos(x+y))
     }
     func Y(x: Double, y: Double) -> Double
     {
-        return (1.2+0.5*cos(y))*sin(x)
+        if (equations[1].characters.count) > 0
+        {
+            var numericExpression = self.equations[1]
+            if functionType == 3
+            {
+                numericExpression = numericExpression.replacingOccurrences(of: "u", with: "(\(x))")
+                numericExpression = numericExpression.replacingOccurrences(of: "v", with: "(\(y))")
+            }
+            else if functionType == 4
+            {
+                numericExpression = numericExpression.replacingOccurrences(of: "t", with: "(\(x))")
+            }
+            let expression = NSExpression(format: numericExpression)
+            let result = expression.expressionValue(with: nil, context: nil) as! Double
+            return result
+        }
+        return 0
+        //return (1.2+0.5*cos(y))*sin(x)
         //return x*sin(x)*(4+cos(x+y))
     }
     func Z(x: Double, y: Double) -> Double
     {
-        return 0.5*sin(y)+x/pi
+        if (equations[2].characters.count) > 0
+        {
+            var numericExpression = self.equations[2]
+            if functionType == 3
+            {
+                numericExpression = numericExpression.replacingOccurrences(of: "u", with: "(\(x))")
+                numericExpression = numericExpression.replacingOccurrences(of: "v", with: "(\(y))")
+            }
+            else if functionType == 4
+            {
+                numericExpression = numericExpression.replacingOccurrences(of: "t", with: "(\(x))")
+            }
+            let expression = NSExpression(format: numericExpression)
+            let result = expression.expressionValue(with: nil, context: nil) as! Double
+            return result
+        }
+        return 0
+        //return 0.5*sin(y)+x/pi
         //return x*sin(x+y)
     }
     func handlePan(recognizer: UIPanGestureRecognizer)
@@ -1331,14 +1472,32 @@ class ViewController: UIViewController {
         tapAway()
         let velocityX : Double = Double(recognizer.velocity(in: graphView).x)
         let velocityY : Double = Double(recognizer.velocity(in: graphView).y)
-        var speedScale : Double = 0.9
+        let speedScale : Double = 0.0009
         if recognizer.state == .began
         {
-            speedScale = speedScale * 0.4
+            velocityTimer.invalidate()
         }
-        a = a + velocityX * 0.001 * speedScale
-        b = b + velocityY * 0.001 * speedScale
+        else if recognizer.state == .ended
+        {
+            endingVelocityX = velocityX * speedScale
+            endingVelocityPositive = endingVelocityX > 0
+            if !timer.isValid
+            {
+                velocityTimer = Timer.scheduledTimer(timeInterval: 0.003, target: self, selector: #selector(runEndVelocityCode), userInfo: nil, repeats: true)
+            }
+
+        }
+        else
+        {
+            panChange(velocityX: velocityX * speedScale, velocityY: velocityY * speedScale)
+        }
         
+    }
+    func panChange(velocityX: Double, velocityY: Double)
+    {
+        a = a + velocityX
+        b = b + velocityY
+    
         if b < 0
         {
             b = 0
@@ -1347,9 +1506,8 @@ class ViewController: UIViewController {
         {
             b = pi/2
         }
-        
         redraw()
-        
+
     }
     func sign(_ x: Double) -> Double
     {
@@ -1387,14 +1545,12 @@ class ViewController: UIViewController {
             if !(velocity.isNaN || velocity.isInfinite)
             {
                 max = max - velocity * max/15
-                if max > 150
-                {
-                    max = 150
-                }
+              
                 if max < 1
                 {
                     max = 1
                 }
+                axisLengthLabel.text = "AXIS LENGTH: \(String(format: "%.1f", max))"
                 redraw()
                 
             }
@@ -1433,94 +1589,6 @@ class ViewController: UIViewController {
     {
         return range*fmod(t*(n+1),1)+min
     }
-    func postfixConvert(v : [String])
-    {
-        var stack = [String]()
-        for s in v
-        {
-            if(s == "x" || s == "y" || s == "e" || s == "π")
-            {
-                postfixOperations.append(s)
-            }
-            else if(stack.count == 0 || stack.last == "(")
-            {
-                stack.append(s)
-            }
-            else if(s == "(")
-            {
-                stack.append(s)
-            }
-            else if(s == ")")
-            {
-                var cont = true
-                while(cont && stack.count>0)
-                {
-                    let temp : String = stack.popLast()!
-                    if(temp != "(")
-                    {
-                        postfixOperations.append(temp)
-                    }
-                    else
-                    {
-                        cont = false
-                    }
-                }
-                
-            }
-            else if(getPrecedence(o: s) > getPrecedence(o: stack.last!))
-            {
-                stack.append(s)
-            }
-            else if(getPrecedence(o: s) == getPrecedence(o: stack.last!))
-            {
-                postfixOperations.append(stack.popLast()!)
-                stack.append(s)
-            }
-            else if(getPrecedence(o: s) < getPrecedence(o: stack.last!))
-            {
-                postfixOperations.append(stack.popLast()!)
-                if stack.count > 0
-                {
-                    while(getPrecedence(o: s) < getPrecedence(o: stack.last!))
-                    {
-                        postfixOperations.append(stack.popLast()!)
-                        if stack.count == 0
-                        {
-                            break
-                        }
-                    }
-                }
-                
-                stack.append(s)
-            }
-            
-        }
-        while(stack.count > 0)
-        {
-            postfixOperations.append(stack.popLast()!)
-        }
-    }
-    func getPrecedence(o: String) -> Int
-    {
-        if(o == "minus" || o == "plus")
-        {
-            return 1
-        }
-        if(o == "multiply" || o == "divide")
-        {
-            return 2
-        }
-        if(o == "exponent")
-        {
-            return 3
-        }
-        if(o == "sin" || o == "cos" || o == "tan" || o == "ln")
-        {
-            return 4
-        }
-        return 0
-    }
-   
     func widthOfLabelText(label: UILabel) -> CGFloat
     {
         let text : String = label.text!
@@ -1546,6 +1614,15 @@ struct point3D
 public extension NSNumber {
     func sn() -> NSNumber {
         return NSNumber(value: sin(self.doubleValue))
+    }
+    func cs() -> NSNumber {
+        return NSNumber(value: cos(self.doubleValue))
+    }
+    func lg() -> NSNumber {
+        return NSNumber(value: log(self.doubleValue))
+    }
+    func sq() -> NSNumber {
+        return NSNumber(value: sqrt(self.doubleValue))
     }
 }
 var key: Void?

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9FCA6CAD748B6FA2382A6DF4 /* Pods_3DGrapherSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9731A2C2A2BCACF5B4CE3DC3 /* Pods_3DGrapherSwift.framework */; };
 		E42FBED81F15078C0001667E /* iconHighRes.png in Resources */ = {isa = PBXBuildFile; fileRef = E42FBED71F15078C0001667E /* iconHighRes.png */; };
 		E4348A9C1EFB29D500D4E7A1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4348A9B1EFB29D500D4E7A1 /* AppDelegate.swift */; };
 		E4348A9E1EFB29D500D4E7A1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4348A9D1EFB29D500D4E7A1 /* ViewController.swift */; };
@@ -27,6 +28,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9731A2C2A2BCACF5B4CE3DC3 /* Pods_3DGrapherSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_3DGrapherSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		98402C2296CBA7EFD319B063 /* Pods-3DGrapherSwift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-3DGrapherSwift.release.xcconfig"; path = "Pods/Target Support Files/Pods-3DGrapherSwift/Pods-3DGrapherSwift.release.xcconfig"; sourceTree = "<group>"; };
+		CBA046E19042D53FC710563C /* Pods-3DGrapherSwift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-3DGrapherSwift.debug.xcconfig"; path = "Pods/Target Support Files/Pods-3DGrapherSwift/Pods-3DGrapherSwift.debug.xcconfig"; sourceTree = "<group>"; };
 		E42FBED71F15078C0001667E /* iconHighRes.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = iconHighRes.png; path = 3DGrapherSwift/iconHighRes.png; sourceTree = "<group>"; };
 		E4348A981EFB29D500D4E7A1 /* 3DGrapherSwift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 3DGrapherSwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4348A9B1EFB29D500D4E7A1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -53,12 +57,30 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9FCA6CAD748B6FA2382A6DF4 /* Pods_3DGrapherSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		57BC63A2D2F20D741EA0BFFF /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				CBA046E19042D53FC710563C /* Pods-3DGrapherSwift.debug.xcconfig */,
+				98402C2296CBA7EFD319B063 /* Pods-3DGrapherSwift.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		834D171FCA17096BEDDB313A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9731A2C2A2BCACF5B4CE3DC3 /* Pods_3DGrapherSwift.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		E4348A8F1EFB29D500D4E7A1 = {
 			isa = PBXGroup;
 			children = (
@@ -68,6 +90,8 @@
 				E48DE8C81F12170500DACF4E /* icon.png */,
 				E4348A9A1EFB29D500D4E7A1 /* 3DGrapherSwift */,
 				E4348A991EFB29D500D4E7A1 /* Products */,
+				57BC63A2D2F20D741EA0BFFF /* Pods */,
+				834D171FCA17096BEDDB313A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -107,9 +131,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E4348AAA1EFB29D500D4E7A1 /* Build configuration list for PBXNativeTarget "3DGrapherSwift" */;
 			buildPhases = (
+				4B77C5B1D17868C4EDCFF7FD /* [CP] Check Pods Manifest.lock */,
 				E4348A941EFB29D500D4E7A1 /* Sources */,
 				E4348A951EFB29D500D4E7A1 /* Frameworks */,
 				E4348A961EFB29D500D4E7A1 /* Resources */,
+				D4D58641E9C2F6124D586D21 /* [CP] Embed Pods Frameworks */,
+				D3F78626888CBC7D6CD93CF8 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -177,6 +204,54 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4B77C5B1D17868C4EDCFF7FD /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		D3F78626888CBC7D6CD93CF8 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-3DGrapherSwift/Pods-3DGrapherSwift-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D4D58641E9C2F6124D586D21 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-3DGrapherSwift/Pods-3DGrapherSwift-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		E4348A941EFB29D500D4E7A1 /* Sources */ = {
@@ -307,6 +382,7 @@
 		};
 		E4348AAB1EFB29D500D4E7A1 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CBA046E19042D53FC710563C /* Pods-3DGrapherSwift.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 7JEQ65LN2K;
@@ -322,6 +398,7 @@
 		};
 		E4348AAC1EFB29D500D4E7A1 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 98402C2296CBA7EFD319B063 /* Pods-3DGrapherSwift.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 7JEQ65LN2K;

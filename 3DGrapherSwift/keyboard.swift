@@ -8,6 +8,7 @@
 
 import UIKit
 import AudioToolbox
+import SwiftTryCatch
 
 class keyboard : UIView, UIKeyInput {
     public var hasText: Bool
@@ -15,6 +16,8 @@ class keyboard : UIView, UIKeyInput {
     
     var textField : UITextField?
     var viewController : ViewController?
+    var draftNumericExression = String()
+    var draftValue = Double()
     
     var timer: Timer?
     
@@ -139,30 +142,283 @@ class keyboard : UIView, UIKeyInput {
     }
     func graph()
     {
-        //viewController?.render()
-        
-        /*if (textField?.tag)! > 2
+        if (viewController?.chosenFunctionType)! < 3
         {
-            let numericExpression = textField?.text
-            let expression = NSExpression(format: numericExpression!)
-            let result = expression.expressionValue(with: nil, context: nil) as! Double
-            print(result)
-        }*/
-        
-        
-        do
-        {
-            let numericExpression = textField?.text
-            let expression = NSExpression(format: numericExpression!)
-            try let result = expression.expressionValue(with: nil, context: nil)
-
+            if confirmField()
+            {
+                viewController?.equations[0] = draftNumericExression
+                viewController?.functionType = (viewController?.chosenFunctionType)!
+                viewController?.texts[0] = (textField?.text!)!
+                viewController?.textArrays[0] = expressionArray!
+                viewController?.eqnLabel.text = "\((viewController?.functionNames[(viewController?.functionType)!])! as String)=\((viewController?.texts[0])! as String)"
+                viewController?.tapAway()
+                viewController?.render()
+            }
         }
-        catch
+        else if viewController?.chosenFunctionType == 3
         {
-            print("error")
+            var confirmations = [Bool]()
+            for i in 0...6
+            {
+                confirmations.append((viewController?.fields[i].inputView as! keyboard).confirmField())
+            }
+            var confirm = true
+            for c in confirmations
+            {
+                confirm = confirm && c
+            }
+            if confirm
+            {
+                var a = false
+                if (viewController?.fields[3].inputView as! keyboard).draftValue < (viewController?.fields[4].inputView as! keyboard).draftValue
+                {
+                    viewController?.fields[3].backgroundColor = viewController?.view.tintColor.withAlphaComponent(0.4)
+                    viewController?.fields[4].backgroundColor = viewController?.view.tintColor.withAlphaComponent(0.4)
+
+                    a = true
+                }
+                else
+                {
+                    viewController?.fields[3].backgroundColor = UIColor.red.withAlphaComponent(0.5)
+                    viewController?.fields[4].backgroundColor = UIColor.red.withAlphaComponent(0.5)
+
+                }
+                
+                var b = false
+                if (viewController?.fields[5].inputView as! keyboard).draftValue < (viewController?.fields[6].inputView as! keyboard).draftValue
+                {
+                    viewController?.fields[5].backgroundColor = viewController?.view.tintColor.withAlphaComponent(0.4)
+                    viewController?.fields[6].backgroundColor = viewController?.view.tintColor.withAlphaComponent(0.4)
+                    
+                    b = true
+                }
+                else
+                {
+                    viewController?.fields[5].backgroundColor = UIColor.red.withAlphaComponent(0.5)
+                    viewController?.fields[6].backgroundColor = UIColor.red.withAlphaComponent(0.5)
+                }
+                
+                if a && b
+                {
+                    for i in 0...2
+                    {
+                        viewController?.equations[i] = (viewController?.fields[i].inputView as! keyboard).draftNumericExression
+                    }
+                    for i in 0...3
+                    {
+                        viewController?.domains[i] = (viewController?.fields[i+3].inputView as! keyboard).draftValue
+                    }
+          
+
+                    for i in 0...6
+                    {
+                        viewController?.texts[i] = (viewController?.fields[i].text)!
+                        viewController?.textArrays[i] = (viewController?.fields[i].inputView as! keyboard).expressionArray!
+                    }
+                    
+                    viewController?.functionType = (viewController?.chosenFunctionType)!
+                    viewController?.eqnLabel.text = "\((viewController?.functionNames[(viewController?.functionType)!])! as String)=<\((viewController?.texts[0])! as String),\((viewController?.texts[1])! as String),\((viewController?.texts[2])! as String)>"
+                    viewController?.tapAway()
+                    viewController?.render()
+                }
+            }
+        }
+        else if viewController?.chosenFunctionType == 4
+        {
+            var confirmations = [Bool]()
+            for i in 0...4
+            {
+                confirmations.append((viewController?.fields[i].inputView as! keyboard).confirmField())
+            }
+            var confirm = true
+            for c in confirmations
+            {
+                confirm = confirm && c
+            }
+            if confirm
+            {
+                var a = false
+                if (viewController?.fields[3].inputView as! keyboard).draftValue < (viewController?.fields[4].inputView as! keyboard).draftValue
+                {
+                    viewController?.fields[3].backgroundColor = viewController?.view.tintColor.withAlphaComponent(0.4)
+                    viewController?.fields[4].backgroundColor = viewController?.view.tintColor.withAlphaComponent(0.4)
+                    
+                    a = true
+                }
+                else
+                {
+                    viewController?.fields[3].backgroundColor = UIColor.red.withAlphaComponent(0.5)
+                    viewController?.fields[4].backgroundColor = UIColor.red.withAlphaComponent(0.5)
+                    
+                }
+                
+                if a
+                {
+                    for i in 0...2
+                    {
+                        viewController?.equations[i] = (viewController?.fields[i].inputView as! keyboard).draftNumericExression
+                    }
+                    for i in 0...1
+                    {
+                        viewController?.domains[i] = (viewController?.fields[i+3].inputView as! keyboard).draftValue
+                    }
+                    for i in 0...4
+                    {
+                        viewController?.texts[i] = (viewController?.fields[i].text)!
+                        viewController?.textArrays[i] = (viewController?.fields[i].inputView as! keyboard).expressionArray!
+                    }
+                    viewController?.functionType = (viewController?.chosenFunctionType)!
+                    viewController?.eqnLabel.text =  "\((viewController?.functionNames[(viewController?.functionType)!])! as String)=<\((viewController?.texts[0])! as String),\((viewController?.texts[1])! as String),\((viewController?.texts[2])! as String)>"
+                    viewController?.tapAway()
+                    viewController?.render()
+                }
+            }
         }
         
     
+    }
+    func confirmField() -> Bool
+    {
+        var execute = true
+        let numericExpression = convertString(self.textField?.text)
+        var d = Double()
+        
+        SwiftTryCatch.tryRun({
+            
+            let expression = NSExpression(format: numericExpression.replacingOccurrences(of: "x", with: "0").replacingOccurrences(of: "y", with: "0").replacingOccurrences(of: "r", with: "0").replacingOccurrences(of: "θ", with: "0").replacingOccurrences(of: "Φ", with: "0").replacingOccurrences(of: "u", with: "0").replacingOccurrences(of: "v", with: "0").replacingOccurrences(of: "t", with: "0"))
+            let answer = expression.expressionValue(with: nil, context: nil)
+            if (self.textField?.tag)! > 2
+            {
+                d = answer as! Double
+                if d.isNaN || d.isInfinite
+                {
+                    execute = false
+                }
+            }
+            
+        }, catchRun: { (error) in
+            execute = false
+        }, finallyRun: {})
+        
+        if execute
+        {
+            textField?.backgroundColor = viewController?.view.tintColor.withAlphaComponent(0.4)
+            if (textField?.tag)! < 3
+            {
+                draftNumericExression = numericExpression
+            }
+            else
+            {
+                draftValue = d
+            }
+        }
+        else
+        {
+            self.textField?.backgroundColor = UIColor.red.withAlphaComponent(0.5)
+        }
+        
+        return execute
+
+    }
+    func convertString(_ expression : String!) -> String
+    {
+        var numericExpression = expression!
+        numericExpression = numericExpression.replacingOccurrences(of: "⋅", with: "*")
+        numericExpression = numericExpression.replacingOccurrences(of: "^", with: "**")
+        numericExpression = numericExpression.replacingOccurrences(of: "e", with: "(\(M_E))")
+        numericExpression = numericExpression.replacingOccurrences(of: "π", with: "(\(M_PI))")
+        
+        while(numericExpression.contains("sin"))
+        {
+            let range = numericExpression.range(of: "sin")
+            var temp = numericExpression.index(before: (range?.upperBound)!)
+            var numPar : Int = 0
+            repeat
+            {
+                temp = numericExpression.index(after: temp)
+                
+                let currentChar : Character = numericExpression[temp]
+                if(currentChar=="(")
+                {
+                    numPar = numPar + 1
+                }
+                if(currentChar==")")
+                {
+                    numPar = numPar - 1
+                }
+            }while(numPar>0 && numericExpression.distance(from: numericExpression.startIndex, to: (temp))+1<numericExpression.characters.count)
+            numericExpression.insert(contentsOf: ",'sn'".characters, at: temp)
+            numericExpression.replaceSubrange(range!, with: "FUNCTION")
+        }
+        while(numericExpression.contains("cos"))
+        {
+            let range = numericExpression.range(of: "cos")
+            var temp = numericExpression.index(before: (range?.upperBound)!)
+            var numPar : Int = 0
+            repeat
+            {
+                temp = numericExpression.index(after: temp)
+                
+                let currentChar : Character = numericExpression[temp]
+                if(currentChar=="(")
+                {
+                    numPar = numPar + 1
+                }
+                if(currentChar==")")
+                {
+                    numPar = numPar - 1
+                }
+            }while(numPar>0 && numericExpression.distance(from: numericExpression.startIndex, to: (temp))+1<numericExpression.characters.count)
+            numericExpression.insert(contentsOf: ",'cs'".characters, at: temp)
+            numericExpression.replaceSubrange(range!, with: "FUNCTION")
+        }
+        while(numericExpression.contains("ln"))
+        {
+            let range = numericExpression.range(of: "ln")
+            var temp = numericExpression.index(before: (range?.upperBound)!)
+            var numPar : Int = 0
+            repeat
+            {
+                temp = numericExpression.index(after: temp)
+                
+                let currentChar : Character = numericExpression[temp]
+                if(currentChar=="(")
+                {
+                    numPar = numPar + 1
+                }
+                if(currentChar==")")
+                {
+                    numPar = numPar - 1
+                }
+            }while(numPar>0 && numericExpression.distance(from: numericExpression.startIndex, to: (temp))+1<numericExpression.characters.count)
+            numericExpression.insert(contentsOf: ",'lg'".characters, at: temp)
+            numericExpression.replaceSubrange(range!, with: "FUNCTION")
+        }
+        while(numericExpression.contains("√"))
+        {
+            let range = numericExpression.range(of: "√")
+            var temp = numericExpression.index(before: (range?.upperBound)!)
+            var numPar : Int = 0
+            repeat
+            {
+                temp = numericExpression.index(after: temp)
+                
+                let currentChar : Character = numericExpression[temp]
+                if(currentChar=="(")
+                {
+                    numPar = numPar + 1
+                }
+                if(currentChar==")")
+                {
+                    numPar = numPar - 1
+                }
+            }while(numPar>0 && numericExpression.distance(from: numericExpression.startIndex, to: (temp))+1<numericExpression.characters.count)
+            numericExpression.insert(contentsOf: ",'sq'".characters, at: temp)
+            numericExpression.replaceSubrange(range!, with: "FUNCTION")
+        }
+        return numericExpression
+        
+        
     }
     func insertText(_ text: String) {
         hasText = true
@@ -187,7 +443,6 @@ class keyboard : UIView, UIKeyInput {
             let index = textField?.text?.index((textField?.text?.startIndex)!, offsetBy: (textField?.text?.characters.count)! - (lastVariable?.characters.count)!)
             textField?.text? = (textField?.text?.substring(to: index!))!
         }
-
         
     }
     func getLast() -> String
@@ -291,7 +546,7 @@ class keyboard : UIView, UIKeyInput {
         {
             return true
         }
-        else if string == "φ"
+        else if string == "Φ"
         {
             return true
         }

@@ -1,0 +1,12 @@
+PODS:
+  - SwiftTryCatch (0.0.1)
+
+DEPENDENCIES:
+  - SwiftTryCatch
+
+SPEC CHECKSUMS:
+  SwiftTryCatch: fb6d2b34abe48efd69578dac919293a44f95b481
+
+PODFILE CHECKSUM: 4d5fe9a2a1ea04272caf7faee9eb9f1a2833583e
+
+COCOAPODS: 1.0.1

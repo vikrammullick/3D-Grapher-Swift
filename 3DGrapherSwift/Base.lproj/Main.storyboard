@@ -26,7 +26,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <gestureRecognizers/>
                                 <connections>
-                                    <outletCollection property="gestureRecognizers" destination="JZ0-Ew-3bb" appends="YES" id="pHP-tn-GuO"/>
+                                    <outletCollection property="gestureRecognizers" destination="Xow-Zp-DAx" appends="YES" id="JgB-Yw-4Lz"/>
                                 </connections>
                             </view>
                         </subviews>
@@ -43,9 +43,9 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="JZ0-Ew-3bb">
+                <tapGestureRecognizer id="Xow-Zp-DAx">
                     <connections>
-                        <action selector="tapAway:" destination="BYZ-38-t0r" id="yAG-kw-3Rq"/>
+                        <action selector="tapAway:" destination="BYZ-38-t0r" id="LrO-uB-4Hh"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>
