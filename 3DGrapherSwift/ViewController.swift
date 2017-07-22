@@ -11,6 +11,9 @@ import AudioToolbox
 
 class ViewController: UIViewController {
     
+    var welcomeView = UIView()
+    var showWelcome = true
+    
     var equations = [String(),String(),String()]
     var domains = [Double(),Double(),Double(),Double()]
     var texts = [String(),String(),String(),String(),String(),String(),String()]
@@ -147,6 +150,9 @@ class ViewController: UIViewController {
         if let axesOn = defaults.object(forKey: "isAxesOn") {
             self.isAxesOn = axesOn as! Bool
         }
+        if let welcome = defaults.object(forKey: "showWelcome"){
+            self.showWelcome = welcome as! Bool
+        }
         axisLengthLabel.isHidden = !isAxesOn
         
         precision = desiredPrecision
@@ -188,14 +194,75 @@ class ViewController: UIViewController {
     }
     override func viewDidAppear(_ animated: Bool)
     {
-        setupTopView()
-        setupMenu()
-        setupAutorotateButton()
+        self.xSide = Double(self.graphView.bounds.width)
+        self.ySide = Double(self.graphView.bounds.height)
+        self.setupTopView()
+        self.setupMenu()
+        self.setupAutorotateButton()
+        self.render()
+
+        if showWelcome
+        {
+            runWelcome()
+        }
+   
         
-        xSide = Double(graphView.bounds.width)
-        ySide = Double(graphView.bounds.height)
+    }
+    func runWelcome()
+    {
+        let baseWelcomeView = UIView(frame: view.frame)
+        view.addSubview(baseWelcomeView)
         
-        render()
+        welcomeView = UIView(frame: CGRect(x: self.graphView.frame.origin.x+self.graphView.frame.width/2-150, y: self.graphView.frame.origin.y+self.graphView.frame.height/2-200, width: 300, height: 400))
+        welcomeView.backgroundColor = .white
+        welcomeView.layer.cornerRadius = 10
+        welcomeView.clipsToBounds = true
+        baseWelcomeView.addSubview(welcomeView)
+        
+        let welcomeLabel = UILabel(frame: CGRect(x: 0, y: 0, width: welcomeView.frame.width, height: height))
+        welcomeLabel.textAlignment = .center
+        welcomeLabel.textColor = .darkGray
+        welcomeLabel.backgroundColor = .white
+        welcomeLabel.font = welcomeLabel.font.withSize(23)
+        welcomeLabel.text = "Welcome!"
+        welcomeView.addSubview(welcomeLabel)
+
+        let continueButton = UIButton(frame: CGRect(x: 0, y: welcomeView.frame.height-height, width: welcomeView.frame.width, height: height))
+        continueButton.backgroundColor = .white
+        continueButton.setTitle("Continue to 3D Grapher", for: .normal)
+        continueButton.setTitleColor(view.tintColor, for: .normal)
+        continueButton.setTitleColor(.darkGray, for: .highlighted)
+        continueButton.addTarget(self, action: #selector(closeWelcome), for: .touchUpInside)
+        welcomeView.addSubview(continueButton)
+        
+        let welcomeText = UITextView(frame: CGRect(x: 10, y: height, width: 280, height: 400-height*2))
+        welcomeText.backgroundColor = UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
+        welcomeText.isUserInteractionEnabled = false
+        welcomeText.text = "Thank you for downloading 3D Grapher!\n\n3D Grapher is available free of charge, but if you would like to show your support I would appreciate if you could leave a rating on the App Store and share 3D Grapher with your friends.\n\nI hope you enjoy the app! 😄"
+        welcomeText.font = UIFont.systemFont(ofSize: 20, weight: UIFontWeightThin)
+        welcomeView.addSubview(welcomeText)
+
+        welcomeView.frame = CGRect(x: self.graphView.frame.origin.x+self.graphView.frame.width/2, y: self.graphView.frame.origin.y+self.graphView.frame.height/2, width: 0, height: 0)
+
+        UIView.animate(withDuration: 1, animations: {
+            
+            self.welcomeView.frame = CGRect(x: self.graphView.frame.origin.x+self.graphView.frame.width/2-150, y: self.graphView.frame.origin.y+self.graphView.frame.height/2-200, width: 300, height: 400)
+
+        })
+        
+    }
+    func closeWelcome()
+    {
+        UIView.animate(withDuration: 1, animations: {
+            
+            self.welcomeView.frame = CGRect(x: self.graphView.frame.origin.x+self.graphView.frame.width/2, y: self.graphView.frame.origin.y+self.graphView.frame.height/2, width: 0, height: 0)
+            
+        }, completion:
+            {
+                complete in
+                self.welcomeView.superview?.removeFromSuperview()
+                self.defaults.set(false, forKey: "showWelcome")
+            })
     }
     func setupMenu()
     {
@@ -206,7 +273,7 @@ class ViewController: UIViewController {
         menuView.clipsToBounds = true
         menuView.frame = CGRect(x: graphView.frame.origin.x+leftSpacing, y: view.frame.height-maxHeight-(6+leftSpacing), width: view.frame.width-2*(graphView.frame.origin.x+leftSpacing), height: maxHeight)
         view.addSubview(menuView)
-        //menuView.isUserInteractionEnabled = false
+
         let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         menuView.addGestureRecognizer(panGestureRecognizer)
         
@@ -1008,7 +1075,7 @@ class ViewController: UIViewController {
     {
         if !isRotating
         {
-            autorotateButton.tintColor = UIColor(red: 109/255, green: 157/255, blue: 206/255, alpha: 1)
+            autorotateButton.tintColor = view.tintColor
             isRotating = true
             velocityTimer.invalidate()
             timer = Timer.scheduledTimer(timeInterval: 0.002, target: self, selector: #selector(runTimedCode), userInfo: nil, repeats: true)
@@ -1218,9 +1285,6 @@ class ViewController: UIViewController {
     }
     func green(t: Double)
     {
-        var currentx : Double = 0
-        var currenty : Double = 0
-        
         var x : Double = Double()
         var y : Double = Double()
         var z : Double = Double()
@@ -1265,11 +1329,7 @@ class ViewController: UIViewController {
             z = Z(x: g, y: h)
         }
         
-        currentx = xx*x+yx*y+zx*z
-        currenty = xy*x+yy*y+zy*z
-        currentx = currentx/max*xSide/2
-        currenty = currenty/max*xSide/2
-        if !(currentx.isNaN || currentx.isInfinite || currenty.isNaN || currenty.isInfinite)
+        if !(x.isNaN || x.isInfinite || y.isNaN || y.isInfinite || z.isNaN || z.isInfinite)
         {
             self.prerender[prerender.count-1].append(point3D(x: x, y: y, z: z))
         }
@@ -1281,9 +1341,6 @@ class ViewController: UIViewController {
     }
     func white(t: Double)
     {
-        var currentx : Double = 0
-        var currenty : Double = 0
-        
         var x : Double = Double()
         var y : Double = Double()
         var z : Double = Double()
@@ -1328,12 +1385,7 @@ class ViewController: UIViewController {
             z = Z(x: h, y: g)
         }
         
-        currentx = xx*x+yx*y+zx*z
-        currenty = xy*x+yy*y+zy*z
-        currentx = currentx/max*xSide/2
-        currenty = currenty/max*xSide/2
-        
-        if !(currentx.isNaN || currentx.isInfinite || currenty.isNaN || currenty.isInfinite)
+        if !(x.isNaN || x.isInfinite || y.isNaN || y.isInfinite || z.isNaN || z.isInfinite)
         {
             self.prerender[prerender.count-1].append(point3D(x: x, y: y, z: z))
         }
@@ -1354,7 +1406,14 @@ class ViewController: UIViewController {
             let y = Y(x: t, y: 0)
             let z = Z(x: t, y: 0)
         
-            self.prerender[prerender.count-1].append(point3D(x: x, y: y, z: z))
+            if !(x.isNaN || x.isInfinite || y.isNaN || y.isInfinite || z.isNaN || z.isInfinite)
+            {
+                self.prerender[prerender.count-1].append(point3D(x: x, y: y, z: z))
+            }
+            else
+            {
+                prerender.append([point3D]())
+            }
         }
     }
     func greenGraph(start: Double, end: Double)

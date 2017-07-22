@@ -24,6 +24,7 @@
 		E48DE8C91F12170500DACF4E /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E48DE8C81F12170500DACF4E /* icon.png */; };
 		E48DE8D01F132B0F00DACF4E /* rotate1.png in Resources */ = {isa = PBXBuildFile; fileRef = E48DE8CE1F132B0F00DACF4E /* rotate1.png */; };
 		E48DE8D11F132B0F00DACF4E /* rotate2.png in Resources */ = {isa = PBXBuildFile; fileRef = E48DE8CF1F132B0F00DACF4E /* rotate2.png */; };
+		E497439B1F21C8E60020C943 /* launchView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E497439A1F21C8E60020C943 /* launchView.xib */; };
 		E4FA60731F197F180027BDFB /* keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FA60721F197F180027BDFB /* keyboard.swift */; };
 /* End PBXBuildFile section */
 
@@ -49,6 +50,7 @@
 		E48DE8C81F12170500DACF4E /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = 3DGrapherSwift/icon.png; sourceTree = "<group>"; };
 		E48DE8CE1F132B0F00DACF4E /* rotate1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = rotate1.png; path = 3DGrapherSwift/rotate1.png; sourceTree = "<group>"; };
 		E48DE8CF1F132B0F00DACF4E /* rotate2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = rotate2.png; path = 3DGrapherSwift/rotate2.png; sourceTree = "<group>"; };
+		E497439A1F21C8E60020C943 /* launchView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = launchView.xib; sourceTree = "<group>"; };
 		E4FA60721F197F180027BDFB /* keyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = keyboard.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -119,6 +121,7 @@
 				E4348A9F1EFB29D500D4E7A1 /* Main.storyboard */,
 				E4348AA21EFB29D500D4E7A1 /* Assets.xcassets */,
 				E4348AA41EFB29D500D4E7A1 /* LaunchScreen.storyboard */,
+				E497439A1F21C8E60020C943 /* launchView.xib */,
 				E4348AA71EFB29D500D4E7A1 /* Info.plist */,
 			);
 			path = 3DGrapherSwift;
@@ -198,6 +201,7 @@
 				E48DE8D01F132B0F00DACF4E /* rotate1.png in Resources */,
 				E45049331F1791E1004B6FA2 /* mathBoardPolar.xib in Resources */,
 				E4348AA31EFB29D500D4E7A1 /* Assets.xcassets in Resources */,
+				E497439B1F21C8E60020C943 /* launchView.xib in Resources */,
 				E4348AA11EFB29D500D4E7A1 /* Main.storyboard in Resources */,
 				E45049341F1791E1004B6FA2 /* mathBoardSpherical.xib in Resources */,
 			);
@@ -327,7 +331,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -371,7 +375,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -389,7 +393,7 @@
 				INFOPLIST_FILE = 3DGrapherSwift/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "Vikram-Mullick.-DGrapherSwift";
+				PRODUCT_BUNDLE_IDENTIFIER = Grapher.Grapher;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -405,7 +409,7 @@
 				INFOPLIST_FILE = 3DGrapherSwift/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "Vikram-Mullick.-DGrapherSwift";
+				PRODUCT_BUNDLE_IDENTIFIER = Grapher.Grapher;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1510" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hzv-mg-FTP">
+                    <rect key="frame" x="0.0" y="82" width="375" height="502"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconHighRes.png" translatesAutoresizingMaskIntoConstraints="NO" id="Ma3-VL-uEw">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="375"/>
+                            <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="width" secondItem="Ma3-VL-uEw" secondAttribute="height" multiplier="1:1" id="ERS-Ww-2Kn"/>
+                            </constraints>
+                        </imageView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3D Grapher" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mlI-1J-hUc">
+                            <rect key="frame" x="0.0" y="375" width="375" height="65"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="65" id="EpJ-qh-xWT"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" weight="thin" pointSize="50"/>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Vikram Mullick" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bUV-hF-OBz">
+                            <rect key="frame" x="0.0" y="437" width="375" height="65"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="65" id="5L6-Ji-AM8"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" weight="thin" pointSize="25"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="bUV-hF-OBz" secondAttribute="bottom" id="1ae-Am-hlb"/>
+                        <constraint firstItem="Ma3-VL-uEw" firstAttribute="leading" secondItem="hzv-mg-FTP" secondAttribute="leading" id="9th-LD-n5N"/>
+                        <constraint firstAttribute="trailing" secondItem="Ma3-VL-uEw" secondAttribute="trailing" id="D7X-sN-Cff"/>
+                        <constraint firstItem="bUV-hF-OBz" firstAttribute="leading" secondItem="hzv-mg-FTP" secondAttribute="leading" id="KJb-c1-Vdy"/>
+                        <constraint firstItem="bUV-hF-OBz" firstAttribute="top" secondItem="mlI-1J-hUc" secondAttribute="bottom" constant="-3" id="Lyy-9A-CsD"/>
+                        <constraint firstItem="mlI-1J-hUc" firstAttribute="top" secondItem="Ma3-VL-uEw" secondAttribute="bottom" id="S1I-qh-kfJ"/>
+                        <constraint firstAttribute="trailing" secondItem="mlI-1J-hUc" secondAttribute="trailing" id="esS-Bm-QcS"/>
+                        <constraint firstItem="mlI-1J-hUc" firstAttribute="leading" secondItem="hzv-mg-FTP" secondAttribute="leading" id="flp-kQ-Rz4"/>
+                        <constraint firstAttribute="trailing" secondItem="bUV-hF-OBz" secondAttribute="trailing" id="r0v-FV-NmB"/>
+                        <constraint firstItem="Ma3-VL-uEw" firstAttribute="top" secondItem="hzv-mg-FTP" secondAttribute="top" id="vbq-5Q-g8W"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="hzv-mg-FTP" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="Jf2-J1-ZFs"/>
+                <constraint firstItem="hzv-mg-FTP" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="ail-nV-iVc"/>
+                <constraint firstAttribute="trailing" secondItem="hzv-mg-FTP" secondAttribute="trailing" id="bvG-1c-O61"/>
+            </constraints>
+        </view>
+    </objects>
+    <resources>
+        <image name="iconHighRes.png" width="1536" height="1536"/>
+    </resources>
+</document>

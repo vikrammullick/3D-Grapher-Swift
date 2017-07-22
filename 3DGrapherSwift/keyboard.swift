@@ -55,7 +55,7 @@ class keyboard : UIView, UIKeyInput {
                     button.addTarget(self, action:#selector(keyboardTapEnd), for: .touchUpInside)
                     button.addTarget(self, action:#selector(keyboardTapStart), for: .touchDragEnter)
                     button.addTarget(self, action:#selector(keyboardTapEnd), for: .touchDragExit)
-                    if button.titleLabel?.text == "del"
+                    if button.titleLabel?.text == "delete"
                     {
                         button.addTarget(self, action:#selector(deleteStart), for: .touchDown)
                         button.addTarget(self, action:#selector(deleteEnd), for: .touchUpInside)
