@@ -47,7 +47,7 @@ class ViewController: UIViewController {
     let colorButtonSelectView = UIView()
     var colorButtonSelectViewAdjustment = CGFloat()
     var colors = [[UIColor]]()
-    var colorIndex = 0
+    var colorIndex = 1
     
     let height : CGFloat = 47
     let spacing : CGFloat = 5.7
@@ -66,10 +66,10 @@ class ViewController: UIViewController {
     var xSide = Double()
     var ySide = Double()
     var max : Double = 6
-    var a : Double = -2.35
+    var a : Double = M_PI_4-M_PI
     var n : Double = 40
     var s : Double = Double()
-    var b : Double = 0.8
+    var b : Double = M_PI_4
     var c : Double = 0
     var lineWidth : CGFloat = 0.75
     var parametricLineWidth : CGFloat = 2
@@ -261,6 +261,8 @@ class ViewController: UIViewController {
             {
                 complete in
                 self.welcomeView.superview?.removeFromSuperview()
+                self.toggleMenu(sender: self.menuButton)
+                self.functionTypeButtonPress(sender: self.functionTypeButton)
                 self.defaults.set(false, forKey: "showWelcome")
             })
     }
@@ -1078,7 +1080,7 @@ class ViewController: UIViewController {
             autorotateButton.tintColor = view.tintColor
             isRotating = true
             velocityTimer.invalidate()
-            timer = Timer.scheduledTimer(timeInterval: 0.002, target: self, selector: #selector(runTimedCode), userInfo: nil, repeats: true)
+            timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(runTimedCode), userInfo: nil, repeats: true)
 
         }
         else
@@ -1120,7 +1122,7 @@ class ViewController: UIViewController {
     }
     func runTimedCode()
     {
-        a = a + 0.02
+        a = a + 0.01
         redraw()
     }
     func redraw()
@@ -1542,7 +1544,7 @@ class ViewController: UIViewController {
             endingVelocityPositive = endingVelocityX > 0
             if !timer.isValid
             {
-                velocityTimer = Timer.scheduledTimer(timeInterval: 0.003, target: self, selector: #selector(runEndVelocityCode), userInfo: nil, repeats: true)
+                velocityTimer = Timer.scheduledTimer(timeInterval: 0.008, target: self, selector: #selector(runEndVelocityCode), userInfo: nil, repeats: true)
             }
 
         }
