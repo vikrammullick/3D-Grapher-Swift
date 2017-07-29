@@ -23,8 +23,6 @@ class ViewController: UIViewController {
 
     var prerender = [[point3D]]()
     
-    var postfixOperations = [String]()
-    
     @IBOutlet weak var graphView: UIView!
     
     let graphTypes = ["z(x,y)","z(r,θ)","ρ(θ,Φ)","r(u,v)","r(t)"]
@@ -1297,7 +1295,7 @@ class ViewController: UIViewController {
             let h : Double = self.h(t: t, min: -1*s, range: 2*s)
             x = h
             y = g
-            z = function(x: h, y: g, operations: postfixOperations)
+            z = function(x: h, y: g)
         }
         else if functionType == 1
         {
@@ -1307,7 +1305,7 @@ class ViewController: UIViewController {
             let sing : Double = sin(g)
             x = h*cosg
             y = h*sing
-            z = function(x: h, y: g, operations: postfixOperations)
+            z = function(x: h, y: g)
         }
         else if functionType == 2
         {
@@ -1317,7 +1315,7 @@ class ViewController: UIViewController {
             let sing : Double = sin(g)
             let cosh : Double = cos(h)
             let sinh : Double = sin(h)
-            let funcgh : Double = function(x: g, y: h, operations: postfixOperations)
+            let funcgh : Double = function(x: g, y: h)
             x = funcgh*cosh*sing
             y = funcgh*sinh*sing
             z = funcgh*cosg
@@ -1353,7 +1351,7 @@ class ViewController: UIViewController {
             let h : Double = self.h(t: t, min: -1*s, range: 2*s)
             x = g
             y = h
-            z = function(x: g, y: h, operations: postfixOperations)
+            z = function(x: g, y: h)
         }
         else if functionType == 1
         {
@@ -1363,7 +1361,7 @@ class ViewController: UIViewController {
             let sinh : Double = sin(h)
             x = g*cosh
             y = g*sinh
-            z = function(x: g, y: h, operations: postfixOperations)
+            z = function(x: g, y: h)
         }
         else if functionType == 2
         {
@@ -1373,7 +1371,7 @@ class ViewController: UIViewController {
             let sinh : Double = sin(h)
             let cosg : Double = cos(g)
             let sing : Double = sin(g)
-            let funchg : Double = function(x: h, y: g, operations: postfixOperations)
+            let funchg : Double = function(x: h, y: g)
             x = funchg*cosg*sinh
             y = funchg*sing*sinh
             z = funchg*cosh
@@ -1436,7 +1434,7 @@ class ViewController: UIViewController {
         white(t: end-smallDouble)
 
     }
-    func function(x: Double, y: Double, operations: [String]) -> Double
+    func function(x: Double, y: Double) -> Double
     {
         if (equations[0].characters.count) > 0
         {

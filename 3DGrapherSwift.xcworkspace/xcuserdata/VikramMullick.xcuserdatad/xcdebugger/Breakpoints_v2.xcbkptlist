@@ -10,12 +10,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "3DGrapherSwift/ViewController.swift"
-            timestampString = "522627728.983453"
+            timestampString = "522995188.233727"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1459"
-            endingLineNumber = "1459"
-            landmarkName = "function(x:y:operations:)"
+            startingLineNumber = "1462"
+            endingLineNumber = "1462"
+            landmarkName = "function(x:y:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -26,12 +26,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "3DGrapherSwift/ViewController.swift"
-            timestampString = "522627728.983453"
+            timestampString = "522995188.233727"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1461"
-            endingLineNumber = "1461"
-            landmarkName = "function(x:y:operations:)"
+            startingLineNumber = "1464"
+            endingLineNumber = "1464"
+            landmarkName = "X(x:y:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -488,12 +488,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "3DGrapherSwift/ViewController.swift"
-            timestampString = "522627728.983453"
+            timestampString = "522995188.233727"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1439"
-            endingLineNumber = "1439"
-            landmarkName = "function(x:y:operations:)"
+            startingLineNumber = "1442"
+            endingLineNumber = "1442"
+            landmarkName = "function(x:y:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -504,12 +504,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "3DGrapherSwift/ViewController.swift"
-            timestampString = "522627728.983453"
+            timestampString = "522995188.233727"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1438"
-            endingLineNumber = "1438"
-            landmarkName = "whiteGraph(start:end:)"
+            startingLineNumber = "1441"
+            endingLineNumber = "1441"
+            landmarkName = "function(x:y:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -520,12 +520,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "3DGrapherSwift/ViewController.swift"
-            timestampString = "522627728.983453"
+            timestampString = "522995188.233727"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1440"
-            endingLineNumber = "1440"
-            landmarkName = "function(x:y:operations:)"
+            startingLineNumber = "1443"
+            endingLineNumber = "1443"
+            landmarkName = "function(x:y:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -599,54 +599,6 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "3DGrapherSwift/ViewController.swift"
-            timestampString = "522627728.983453"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1138"
-            endingLineNumber = "1138"
-            landmarkName = "redraw()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "3DGrapherSwift/ViewController.swift"
-            timestampString = "522627728.983453"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1137"
-            endingLineNumber = "1137"
-            landmarkName = "redraw()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "3DGrapherSwift/ViewController.swift"
-            timestampString = "522627728.983453"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1136"
-            endingLineNumber = "1136"
-            landmarkName = "redraw()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "3DGrapherSwift/keyboard.swift"
             timestampString = "522228408.543043"
             startingColumnNumber = "9223372036854775807"
@@ -664,44 +616,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "3DGrapherSwift/ViewController.swift"
-            timestampString = "522627728.983453"
+            timestampString = "522995188.233727"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1135"
-            endingLineNumber = "1135"
-            landmarkName = "redraw()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "3DGrapherSwift/ViewController.swift"
-            timestampString = "522627728.983453"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1136"
-            endingLineNumber = "1136"
-            landmarkName = "redraw()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "3DGrapherSwift/ViewController.swift"
-            timestampString = "522627728.983453"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1193"
-            endingLineNumber = "1193"
-            landmarkName = "render()"
+            startingLineNumber = "1196"
+            endingLineNumber = "1196"
+            landmarkName = "recalibrate()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -760,11 +680,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "3DGrapherSwift/ViewController.swift"
-            timestampString = "522627728.983453"
+            timestampString = "522995188.233727"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1400"
-            endingLineNumber = "1400"
+            startingLineNumber = "1403"
+            endingLineNumber = "1403"
             landmarkName = "parametrictGraph()"
             landmarkType = "7">
          </BreakpointContent>
@@ -776,11 +696,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "3DGrapherSwift/ViewController.swift"
-            timestampString = "522411389.552557"
+            timestampString = "522995188.233727"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "197"
-            endingLineNumber = "197"
+            startingLineNumber = "206"
+            endingLineNumber = "206"
             landmarkName = "viewDidAppear(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -808,12 +728,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "3DGrapherSwift/ViewController.swift"
-            timestampString = "522412832.413065"
+            timestampString = "522995188.233727"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "252"
-            endingLineNumber = "252"
-            landmarkName = "runWelcome()"
+            startingLineNumber = "261"
+            endingLineNumber = "261"
+            landmarkName = "closeWelcome()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
