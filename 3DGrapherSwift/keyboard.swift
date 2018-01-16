@@ -78,7 +78,7 @@ class keyboard : UIView, UIKeyInput {
         }
 
     }
-    func keyboardTap(sender: UIButton!)
+    @objc func keyboardTap(sender: UIButton!)
     {
         let textToEnter : String = getString((sender.titleLabel?.text)!)
         if isFunction(textToEnter) || isVariable(textToEnter)
@@ -112,7 +112,7 @@ class keyboard : UIView, UIKeyInput {
         
       
     }
-    func keyboardTapEnd(sender: UIButton!)
+    @objc func keyboardTapEnd(sender: UIButton!)
     {
         sender.layer.borderColor = UIColor.black.cgColor
         if sender.subviews.count > 0
@@ -124,7 +124,7 @@ class keyboard : UIView, UIKeyInput {
         }
         
     }
-    func keyboardTapStart(sender: UIButton!)
+    @objc func keyboardTapStart(sender: UIButton!)
     {
         if sender.tag < 2
         {
@@ -140,8 +140,12 @@ class keyboard : UIView, UIKeyInput {
         }
         AudioServicesPlaySystemSound(1104)
     }
-    func graph()
+    @objc func graph()
     {
+        if isDecimal(getLast())
+        {
+            insertText("0")
+        }
         if (viewController?.chosenFunctionType)! < 3
         {
             if confirmField()
@@ -285,7 +289,7 @@ class keyboard : UIView, UIKeyInput {
         
         SwiftTryCatch.tryRun({
             
-            let expression = NSExpression(format: numericExpression.replacingOccurrences(of: "x", with: "0").replacingOccurrences(of: "y", with: "0").replacingOccurrences(of: "r", with: "0").replacingOccurrences(of: "θ", with: "0").replacingOccurrences(of: "Φ", with: "0").replacingOccurrences(of: "u", with: "0").replacingOccurrences(of: "v", with: "0").replacingOccurrences(of: "t", with: "0"))
+            let expression = NSExpression(format: numericExpression.replacingOccurrences(of: "x", with: "0.0").replacingOccurrences(of: "y", with: "0.0").replacingOccurrences(of: "r", with: "0.0").replacingOccurrences(of: "θ", with: "0.0").replacingOccurrences(of: "Φ", with: "0.0").replacingOccurrences(of: "u", with: "0.0").replacingOccurrences(of: "v", with: "0.0").replacingOccurrences(of: "t", with: "0.0"))
             let answer = expression.expressionValue(with: nil, context: nil)
             if (self.textField?.tag)! > 2
             {
@@ -323,10 +327,50 @@ class keyboard : UIView, UIKeyInput {
     func convertString(_ expression : String!) -> String
     {
         var numericExpression = expression!
+        var i = 0
+        while i < numericExpression.count
+        {
+            var hasNum = false
+            var currentChar : String = numericExpression[i]
+            while isNumber(currentChar)
+            {
+                i = i + 1
+                hasNum = true
+                if i < numericExpression.count
+                {
+                    currentChar = numericExpression[i]
+                }
+                else
+                {
+                    break
+                }
+            }
+            if hasNum
+            {
+                if !isDecimal(currentChar)
+                {
+                    numericExpression.insert(".", at: numericExpression.index(numericExpression.startIndex, offsetBy: i))
+                    numericExpression.insert("0", at: numericExpression.index(numericExpression.startIndex, offsetBy: i+1))
+                    i = i + 2
+                }
+                else
+                {
+                    while(isNumber(numericExpression[i]) || isDecimal(numericExpression[i]))
+                    {
+                        i = i + 1
+                        if i == numericExpression.count - 1
+                        {
+                            break
+                        }
+                    }
+                }
+            }
+            i = i + 1
+        }
         numericExpression = numericExpression.replacingOccurrences(of: "⋅", with: "*")
         numericExpression = numericExpression.replacingOccurrences(of: "^", with: "**")
         numericExpression = numericExpression.replacingOccurrences(of: "e", with: "(\(M_E))")
-        numericExpression = numericExpression.replacingOccurrences(of: "π", with: "(\(M_PI))")
+        numericExpression = numericExpression.replacingOccurrences(of: "π", with: "(\(Double.pi))")
         
         while(numericExpression.contains("sin"))
         {
@@ -346,8 +390,8 @@ class keyboard : UIView, UIKeyInput {
                 {
                     numPar = numPar - 1
                 }
-            }while(numPar>0 && numericExpression.distance(from: numericExpression.startIndex, to: (temp))+1<numericExpression.characters.count)
-            numericExpression.insert(contentsOf: ",'sn'".characters, at: temp)
+            }while(numPar>0 && numericExpression.distance(from: numericExpression.startIndex, to: (temp))+1<numericExpression.count)
+            numericExpression.insert(contentsOf: ",'sn'", at: temp)
             numericExpression.replaceSubrange(range!, with: "FUNCTION")
         }
         while(numericExpression.contains("cos"))
@@ -368,8 +412,8 @@ class keyboard : UIView, UIKeyInput {
                 {
                     numPar = numPar - 1
                 }
-            }while(numPar>0 && numericExpression.distance(from: numericExpression.startIndex, to: (temp))+1<numericExpression.characters.count)
-            numericExpression.insert(contentsOf: ",'cs'".characters, at: temp)
+            }while(numPar>0 && numericExpression.distance(from: numericExpression.startIndex, to: (temp))+1<numericExpression.count)
+            numericExpression.insert(contentsOf: ",'cs'", at: temp)
             numericExpression.replaceSubrange(range!, with: "FUNCTION")
         }
         while(numericExpression.contains("ln"))
@@ -390,8 +434,8 @@ class keyboard : UIView, UIKeyInput {
                 {
                     numPar = numPar - 1
                 }
-            }while(numPar>0 && numericExpression.distance(from: numericExpression.startIndex, to: (temp))+1<numericExpression.characters.count)
-            numericExpression.insert(contentsOf: ",'lg'".characters, at: temp)
+            }while(numPar>0 && numericExpression.distance(from: numericExpression.startIndex, to: (temp))+1<numericExpression.count)
+            numericExpression.insert(contentsOf: ",'lg'", at: temp)
             numericExpression.replaceSubrange(range!, with: "FUNCTION")
         }
         while(numericExpression.contains("√"))
@@ -412,12 +456,11 @@ class keyboard : UIView, UIKeyInput {
                 {
                     numPar = numPar - 1
                 }
-            }while(numPar>0 && numericExpression.distance(from: numericExpression.startIndex, to: (temp))+1<numericExpression.characters.count)
-            numericExpression.insert(contentsOf: ",'sq'".characters, at: temp)
+            }while(numPar>0 && numericExpression.distance(from: numericExpression.startIndex, to: (temp))+1<numericExpression.count)
+            numericExpression.insert(contentsOf: ",'sq'", at: temp)
             numericExpression.replaceSubrange(range!, with: "FUNCTION")
         }
         return numericExpression
-        
         
     }
     func insertText(_ text: String) {
@@ -426,11 +469,11 @@ class keyboard : UIView, UIKeyInput {
         expressionArray?.append(text)
         
     }
-    func deleteStart()
+    @objc func deleteStart()
     {
         timer = Timer.scheduledTimer(timeInterval: 0.15, target: self, selector: #selector(UIKeyInput.deleteBackward), userInfo: nil, repeats: true)
     }
-    func deleteEnd()
+    @objc func deleteEnd()
     {
         timer?.invalidate()
         timer = nil
@@ -440,7 +483,7 @@ class keyboard : UIView, UIKeyInput {
         {
             let lastVariable = expressionArray?.removeLast()
             hasText = expressionArray?.count != 0
-            let index = textField?.text?.index((textField?.text?.startIndex)!, offsetBy: (textField?.text?.characters.count)! - (lastVariable?.characters.count)!)
+            let index = textField?.text?.index((textField?.text?.startIndex)!, offsetBy: (textField?.text?.count)! - (lastVariable?.count)!)
             textField?.text? = (textField?.text?.substring(to: index!))!
         }
         

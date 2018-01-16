@@ -47,6 +47,7 @@ class ViewController: UIViewController {
     var colors = [[UIColor]]()
     var colorIndex = 1
     
+    
     let height : CGFloat = 47
     let spacing : CGFloat = 5.7
     let topSpacing : CGFloat = 2
@@ -64,14 +65,14 @@ class ViewController: UIViewController {
     var xSide = Double()
     var ySide = Double()
     var max : Double = 6
-    var a : Double = M_PI_4-M_PI
+    var a : Double = Double.pi/4-Double.pi
     var n : Double = 40
     var s : Double = Double()
-    var b : Double = M_PI_4
+    var b : Double = Double.pi/4
     var c : Double = 0
     var lineWidth : CGFloat = 0.75
     var parametricLineWidth : CGFloat = 2
-    let pi : Double = M_PI
+    let pi : Double = Double.pi
     
     var functionType = 0
     var chosenFunctionType = Int()
@@ -173,9 +174,9 @@ class ViewController: UIViewController {
         
         let pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(handlePinch))
         graphView.addGestureRecognizer(pinchGestureRecognizer)
-        
+      
     }
-    func changeColor(sender: UIButton!) {
+    @objc func changeColor(sender: UIButton!) {
         let indexDifference = sender.tag - colorIndex
         if indexDifference != 0
         {
@@ -237,7 +238,7 @@ class ViewController: UIViewController {
         welcomeText.backgroundColor = UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
         welcomeText.isUserInteractionEnabled = false
         welcomeText.text = "Thank you for downloading 3D Grapher!\n\n3D Grapher is available free of charge, but if you would like to show your support I would appreciate if you could leave a rating on the App Store and share 3D Grapher with your friends.\n\nI hope you enjoy the app! 😄"
-        welcomeText.font = UIFont.systemFont(ofSize: 20, weight: UIFontWeightThin)
+        welcomeText.font = UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.thin)
         welcomeView.addSubview(welcomeText)
 
         welcomeView.frame = CGRect(x: self.graphView.frame.origin.x+self.graphView.frame.width/2, y: self.graphView.frame.origin.y+self.graphView.frame.height/2, width: 0, height: 0)
@@ -249,7 +250,7 @@ class ViewController: UIViewController {
         })
         
     }
-    func closeWelcome()
+    @objc func closeWelcome()
     {
         UIView.animate(withDuration: 1, animations: {
             
@@ -448,7 +449,7 @@ class ViewController: UIViewController {
         
         
     }
-    func changeGridDensity(sender: UIButton!)
+    @objc func changeGridDensity(sender: UIButton!)
     {
         n = Double(20 + sender.tag*20)
         defaults.set(n, forKey: "gridDensity")
@@ -520,7 +521,7 @@ class ViewController: UIViewController {
         render()
         
     }
-    func toggleMenu(sender: UIButton!)
+    @objc func toggleMenu(sender: UIButton!)
     {
         if sender.backgroundColor == view.tintColor.withAlphaComponent(0.4)
         {
@@ -631,7 +632,7 @@ class ViewController: UIViewController {
 
         
     }
-    func switchValueDidChange(sender: UISwitch!)
+    @objc func switchValueDidChange(sender: UISwitch!)
     {
         isAxesOn = sender.isOn
         defaults.set(isAxesOn, forKey: "isAxesOn")
@@ -666,7 +667,6 @@ class ViewController: UIViewController {
         fieldView.frame = CGRect(x: 0, y: 40, width: graphView.frame.width, height: 29+adjustment)
         fieldView.clipsToBounds = true
         topView.addSubview(fieldView)
-
         
         
         for i in 0...2
@@ -860,7 +860,7 @@ class ViewController: UIViewController {
             {
                 fields[i].text = texts[i]
                 (fields[i].inputView as! keyboard).expressionArray = textArrays[i]
-                (fields[i].inputView as! keyboard).hasText = (fields[i].text?.characters.count)! > 0
+                (fields[i].inputView as! keyboard).hasText = (fields[i].text?.count)! > 0
 
             }
         }
@@ -928,7 +928,7 @@ class ViewController: UIViewController {
             }
         }
     }
-    func dropdownChosen(sender:UIButton!)
+    @objc func dropdownChosen(sender:UIButton!)
     {
         tapAway()
         chosenFunctionType = sender.tag
@@ -939,7 +939,7 @@ class ViewController: UIViewController {
         expand()
         
     }
-    func functionTypeButtonPress(sender:UIButton!)
+    @objc func functionTypeButtonPress(sender:UIButton!)
     {
         if self.functionDropDown.frame.height == 0
         {
@@ -987,7 +987,7 @@ class ViewController: UIViewController {
             }
         }, completion: nil)
     }
-    func minOrExpand(sender:UIButton? = nil) {
+    @objc func minOrExpand(sender:UIButton? = nil) {
         
         tapAway()
         
@@ -1071,7 +1071,7 @@ class ViewController: UIViewController {
         view.addSubview(autorotateButton)
         
     }
-    func toggleAutorotate(_ sender: UIButton? = nil)
+    @objc func toggleAutorotate(_ sender: UIButton? = nil)
     {
         if !isRotating
         {
@@ -1089,7 +1089,7 @@ class ViewController: UIViewController {
         }
 
     }
-    func runEndVelocityCode()
+    @objc func runEndVelocityCode()
     {
         if endingVelocityPositive
         {
@@ -1118,7 +1118,7 @@ class ViewController: UIViewController {
             }
         }
     }
-    func runTimedCode()
+    @objc func runTimedCode()
     {
         a = a + 0.01
         redraw()
@@ -1130,7 +1130,7 @@ class ViewController: UIViewController {
         for curve in prerender
         {
             let aPath = UIBezierPath()
-        
+            
             if curve.count > 0
             {
                 var currentx = (xx*curve[0].x + yx*curve[0].y + zx*curve[0].z)/max*xSide/2
@@ -1161,7 +1161,7 @@ class ViewController: UIViewController {
                 curveLayer.fillColor = UIColor.clear.cgColor
                 graphView.layer.addSublayer(curveLayer)
             }
-
+            
         }
     }
     func render()
@@ -1315,7 +1315,7 @@ class ViewController: UIViewController {
             let sing : Double = sin(g)
             let cosh : Double = cos(h)
             let sinh : Double = sin(h)
-            let funcgh : Double = function(x: g, y: h)
+            let funcgh : Double = function(x: h, y: g)
             x = funcgh*cosh*sing
             y = funcgh*sinh*sing
             z = funcgh*cosg
@@ -1371,7 +1371,7 @@ class ViewController: UIViewController {
             let sinh : Double = sin(h)
             let cosg : Double = cos(g)
             let sing : Double = sin(g)
-            let funchg : Double = function(x: h, y: g)
+            let funchg : Double = function(x: g, y: h)
             x = funchg*cosg*sinh
             y = funchg*sing*sinh
             z = funchg*cosh
@@ -1436,7 +1436,7 @@ class ViewController: UIViewController {
     }
     func function(x: Double, y: Double) -> Double
     {
-        if (equations[0].characters.count) > 0
+        if (equations[0].count) > 0
         {
             var numericExpression = self.equations[0]
             if functionType == 0
@@ -1462,7 +1462,7 @@ class ViewController: UIViewController {
     }
     func X(x: Double, y: Double) -> Double
     {
-        if (equations[0].characters.count) > 0
+        if (equations[0].count) > 0
         {
             var numericExpression = self.equations[0]
             if functionType == 3
@@ -1484,7 +1484,7 @@ class ViewController: UIViewController {
     }
     func Y(x: Double, y: Double) -> Double
     {
-        if (equations[1].characters.count) > 0
+        if (equations[1].count) > 0
         {
             var numericExpression = self.equations[1]
             if functionType == 3
@@ -1506,7 +1506,7 @@ class ViewController: UIViewController {
     }
     func Z(x: Double, y: Double) -> Double
     {
-        if (equations[2].characters.count) > 0
+        if (equations[2].count) > 0
         {
             var numericExpression = self.equations[2]
             if functionType == 3
@@ -1526,12 +1526,12 @@ class ViewController: UIViewController {
         //return 0.5*sin(y)+x/pi
         //return x*sin(x+y)
     }
-    func handlePan(recognizer: UIPanGestureRecognizer)
+    @objc func handlePan(recognizer: UIPanGestureRecognizer)
     {
         tapAway()
         let velocityX : Double = Double(recognizer.velocity(in: graphView).x)
         let velocityY : Double = Double(recognizer.velocity(in: graphView).y)
-        let speedScale : Double = 0.0009
+        let speedScale : Double = 0.00065
         if recognizer.state == .began
         {
             velocityTimer.invalidate()
@@ -1588,7 +1588,7 @@ class ViewController: UIViewController {
         }
         s = s*24/25
     }
-    func handlePinch(recognizer: UIPinchGestureRecognizer)
+    @objc func handlePinch(recognizer: UIPinchGestureRecognizer)
     {
         tapAway()
         if recognizer.state == .ended
@@ -1652,8 +1652,8 @@ class ViewController: UIViewController {
     {
         let text : String = label.text!
         let font : UIFont = label.font
-        let fontAttributes = [NSFontAttributeName: font]
-        let size = (text as NSString).size(attributes: fontAttributes)
+        let fontAttributes = [NSAttributedStringKey.font: font]
+        let size = (text as NSString).size(withAttributes: fontAttributes)
         return size.width
     }
 
@@ -1713,4 +1713,20 @@ extension UITextField {
         return nil
     }
 
+}
+extension String {
+    
+    subscript (i: Int) -> Character {
+        return self[index(startIndex, offsetBy: i)]
+    }
+    
+    subscript (i: Int) -> String {
+        return String(self[i] as Character)
+    }
+    
+    subscript (r: Range<Int>) -> String {
+        let start = index(startIndex, offsetBy: r.lowerBound)
+        let end = index(startIndex, offsetBy: r.upperBound - r.lowerBound)
+        return String(self[Range(start ..< end)])
+    }
 }

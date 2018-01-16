@@ -29,7 +29,7 @@ class AdaptiveLabel: UILabel {
             fontSizeAverage = minFontSize + (maxFontSize - minFontSize) / 2
             
             // Abort if text happens to be nil
-            guard (text?.characters.count)! > 0 else {
+            guard (text?.count)! > 0 else {
                 break
             }
             
@@ -37,7 +37,7 @@ class AdaptiveLabel: UILabel {
                 let labelHeight = frame.size.height
                 
                 let testStringHeight = labelText.size(
-                    attributes: [NSFontAttributeName: font.withSize(fontSizeAverage)]
+                    withAttributes: [NSAttributedStringKey.font: font.withSize(fontSizeAverage)]
                     ).height
                 
                 textAndLabelHeightDiff = labelHeight - testStringHeight
