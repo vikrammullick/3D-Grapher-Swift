@@ -11,6 +11,8 @@ import AudioToolbox
 
 class ViewController: UIViewController {
     
+    var safeAreaBottomMargin = CGFloat()
+    
     var welcomeView = UIView()
     var showWelcome = true
     
@@ -116,6 +118,7 @@ class ViewController: UIViewController {
     let menuButton = UIButton()
     let menuButtonBackView = UIView()
     var menuView = UIView()
+    var menuButtonToggled = false
     
     let axesLabelBackView = UIView()
     let gridDensityLabelBackView = UIView()
@@ -193,6 +196,12 @@ class ViewController: UIViewController {
     }
     override func viewDidAppear(_ animated: Bool)
     {
+        if #available(iOS 11.0, *) {
+            safeAreaBottomMargin = view.safeAreaInsets.bottom
+        } else {
+            safeAreaBottomMargin = 0
+        }
+        
         self.xSide = Double(self.graphView.bounds.width)
         self.ySide = Double(self.graphView.bounds.height)
         self.setupTopView()
@@ -272,7 +281,7 @@ class ViewController: UIViewController {
         
         menuView.backgroundColor = .clear
         menuView.clipsToBounds = true
-        menuView.frame = CGRect(x: graphView.frame.origin.x+leftSpacing, y: view.frame.height-maxHeight-(6+leftSpacing), width: view.frame.width-2*(graphView.frame.origin.x+leftSpacing), height: maxHeight)
+        menuView.frame = CGRect(x: graphView.frame.origin.x+leftSpacing, y: view.frame.height-maxHeight-(6+leftSpacing)-safeAreaBottomMargin, width: view.frame.width-2*(graphView.frame.origin.x+leftSpacing), height: maxHeight)
         view.addSubview(menuView)
 
         let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
@@ -441,7 +450,7 @@ class ViewController: UIViewController {
             
         }
         
-        self.menuView.frame = CGRect(x: graphView.frame.origin.x+leftSpacing, y: self.view.frame.height-height-(6+leftSpacing), width: self.view.frame.width-2*(leftSpacing+graphView.frame.origin.x), height: height)
+        self.menuView.frame = CGRect(x: graphView.frame.origin.x+leftSpacing, y: self.view.frame.height-height-(6+leftSpacing)-safeAreaBottomMargin, width: self.view.frame.width-2*(leftSpacing+graphView.frame.origin.x), height: height)
         for v in self.menuView.subviews
         {
             v.frame = CGRect(x: v.frame.origin.x, y: v.frame.origin.y-(3*height+3*spacing+topSpacing), width: v.frame.width, height: v.frame.height)
@@ -523,11 +532,11 @@ class ViewController: UIViewController {
     }
     @objc func toggleMenu(sender: UIButton!)
     {
-        if sender.backgroundColor == view.tintColor.withAlphaComponent(0.4)
+        if !menuButtonToggled
         {
             UIView.animate(withDuration: 0.25, animations: {
                 
-                self.menuView.frame = CGRect(x: self.graphView.frame.origin.x+self.leftSpacing, y: self.view.frame.height-self.maxHeight-(6+self.leftSpacing), width: self.view.frame.width-2*(self.graphView.frame.origin.x+self.leftSpacing), height: self.maxHeight)
+                self.menuView.frame = CGRect(x: self.graphView.frame.origin.x+self.leftSpacing, y: self.view.frame.height-self.maxHeight-(6+self.leftSpacing)-self.safeAreaBottomMargin, width: self.view.frame.width-2*(self.graphView.frame.origin.x+self.leftSpacing), height: self.maxHeight)
                 for v in self.menuView.subviews
                 {
                     v.frame = CGRect(x: v.frame.origin.x, y: v.frame.origin.y+(3*self.height+3*self.spacing+self.topSpacing), width: v.frame.width, height: v.frame.height)
@@ -564,7 +573,10 @@ class ViewController: UIViewController {
                         
                         self.gridDensityLabelBackView.frame = CGRect(x: self.gridDensityLabelBackView.frame.origin.x, y: self.gridDensityLabelBackView.frame.origin.y, width: self.gridDensityLabelBackView.frame.width+self.spacing*4+self.gridDensityButtonLength*3, height: self.gridDensityLabelBackView.frame.height)
                         
-                    }, completion: nil)
+                    }, completion: {
+                        complete in
+                        self.menuButtonToggled = true
+                    })
                     
                     
             })
@@ -609,7 +621,7 @@ class ViewController: UIViewController {
                         self.menuButton.layer.addSublayer(lineLayer)
                         
                     }
-                    self.menuView.frame = CGRect(x: self.graphView.frame.origin.x+self.leftSpacing, y: self.view.frame.height-self.height-(6+self.leftSpacing), width: self.view.frame.width-2*(self.leftSpacing+self.graphView.frame.origin.x), height: self.height)
+                    self.menuView.frame = CGRect(x: self.graphView.frame.origin.x+self.leftSpacing, y: self.view.frame.height-self.height-(6+self.leftSpacing)-self.safeAreaBottomMargin, width: self.view.frame.width-2*(self.leftSpacing+self.graphView.frame.origin.x), height: self.height)
 
                    
                     self.menuButtonBackView.frame = CGRect(x: 0, y: self.height*3+self.spacing*3+self.topSpacing-(3*self.height+3*self.spacing+self.topSpacing), width: self.height, height: self.height)
@@ -625,8 +637,10 @@ class ViewController: UIViewController {
                     self.gridDensityLabel.frame = self.gridDensityLabelBackView.frame
                    
                     
-                }, completion: nil)
-                
+                }, completion: {
+                    complete in
+                    self.menuButtonToggled = false
+                })
                 
         })
 
@@ -783,7 +797,7 @@ class ViewController: UIViewController {
         axisLengthLabel.text = "AXIS LENGTH: \(String(format: "%.1f", max))"
         view.addSubview(axisLengthLabel)
         
-        functionDropDown.frame = CGRect(x: graphView.frame.width-95+6, y: 5+20, width: 90, height: 0)
+        functionDropDown.frame = CGRect(x: graphView.frame.width-95+6, y: 5+graphView.frame.origin.y, width: 90, height: 0)
         functionDropDown.layer.cornerRadius = 5
         functionDropDown.backgroundColor = view.tintColor
         for button in buttons
@@ -799,7 +813,7 @@ class ViewController: UIViewController {
         editDropdownButtons()
         view.addSubview(functionDropDown)
         
-        functionTypeButton = UIButton(frame: CGRect(x: graphView.frame.width-95+6, y: 5+20, width: 90, height: 30))
+        functionTypeButton = UIButton(frame: CGRect(x: graphView.frame.width-95+6, y: 5+graphView.frame.origin.y, width: 90, height: 30))
         functionTypeButton.setTitle("\(graphTypes[chosenFunctionType]) \u{2193}", for: .normal)
         functionTypeButton.setTitleColor(view.tintColor, for: .normal)
         functionTypeButton.clipsToBounds = true
@@ -887,8 +901,9 @@ class ViewController: UIViewController {
         }
         if chosenFunctionType == 3
         {
-            let width = (graphView.frame.width-5*7-50*2)/4
-            
+//            let width = (graphView.frame.width-5*7-50*2)/4
+            let width = (graphView.frame.width-135)/4
+
             fields[3].frame = CGRect(x: 5, y: 83, width: width, height: 25)
             labels[3].frame = CGRect(x: 10+width, y: 83, width: 50, height: 25)
             labels[3].text = "< u <"
@@ -945,8 +960,8 @@ class ViewController: UIViewController {
         {
             UIView.animate(withDuration: 0.25, animations: {
                 
-                sender.frame = CGRect(x: self.graphView.frame.width-145+6, y: 5+20, width: 140, height: 30)
-                self.functionDropDown.frame = CGRect(x: self.graphView.frame.width-145+6, y: 5+20, width: 140, height: 215)
+                sender.frame = CGRect(x: self.graphView.frame.width-145+6, y: 5+self.graphView.frame.origin.y, width: 140, height: 30)
+                self.functionDropDown.frame = CGRect(x: self.graphView.frame.width-145+6, y: 5+self.graphView.frame.origin.y, width: 140, height: 215)
                 
             }, completion:
                 {
@@ -979,8 +994,8 @@ class ViewController: UIViewController {
         }
         UIView.animate(withDuration: 0.25, animations: {
             
-            self.functionTypeButton.frame = CGRect(x: self.graphView.frame.width-95+6, y: 5+20, width: 90, height: 30)
-            self.functionDropDown.frame = CGRect(x: self.graphView.frame.width-95+6, y: 5+20, width: 90, height: 0)
+            self.functionTypeButton.frame = CGRect(x: self.graphView.frame.width-95+6, y: 5+self.graphView.frame.origin.y, width: 90, height: 30)
+            self.functionDropDown.frame = CGRect(x: self.graphView.frame.width-95+6, y: 5+self.graphView.frame.origin.y, width: 90, height: 0)
             for button in self.buttons
             {
                 button.isHidden = true
@@ -1064,7 +1079,8 @@ class ViewController: UIViewController {
     }
     func setupAutorotateButton()
     {
-        autorotateButton = UIButton(frame: CGRect(x: view.frame.width-54-graphView.frame.origin.x, y: view.frame.height-55, width: 50, height: 50))
+        
+        autorotateButton = UIButton(frame: CGRect(x: view.frame.width-54-graphView.frame.origin.x, y: view.frame.height-55-safeAreaBottomMargin, width: 50, height: 50))
         autorotateButton.setImage(UIImage(named: "rotate1.png")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
         autorotateButton.tintColor = UIColor.white.withAlphaComponent(0.7)
         autorotateButton.addTarget(self, action:#selector(toggleAutorotate), for: .touchDown)
@@ -1664,6 +1680,7 @@ class ViewController: UIViewController {
 
 
 }
+
 struct point3D
 {
     let x : Double
@@ -1727,6 +1744,7 @@ extension String {
     subscript (r: Range<Int>) -> String {
         let start = index(startIndex, offsetBy: r.lowerBound)
         let end = index(startIndex, offsetBy: r.upperBound - r.lowerBound)
-        return String(self[Range(start ..< end)])
+        return String(self[start ..< end])
     }
 }
+
