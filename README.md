@@ -14,4 +14,4 @@ Other Features Include:
 - the option to turn axes on and off
 - many useful mathematical operations 
 
-App Store Link: https://itunes.apple.com/us/app/3d-grapher/id1095999432?mt=8
+[Screenshots](https://imgur.com/a/Sr5TshM)
